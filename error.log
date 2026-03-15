@@ -1,0 +1,6 @@
+
+fatal: detected dubious ownership in repository at 'D:/Documents/Projects/btg-funds-manager/btg-funds-manager'
+'D:/Documents/Projects/btg-funds-manager/btg-funds-manager' is on a file system that does not record ownership
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory D:/Documents/Projects/btg-funds-manager/btg-funds-manager
