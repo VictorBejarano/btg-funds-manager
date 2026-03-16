@@ -1,0 +1,89 @@
+{
+  "name": "apps/btg-manager-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "^build"
+      ],
+      "options": {
+        "command": "echo Build succeeded."
+      }
+    },
+    "watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run-many --targets=build --projects=tag:firebase:dep:apps/btg-manager-api --parallel=100 --watch"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run-many --targets=lint --projects=tag:firebase:dep:apps/btg-manager-api --parallel=100"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run-many --targets=test --projects=tag:firebase:dep:apps/btg-manager-api --parallel=100"
+      }
+    },
+    "firebase": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "firebase --config=firebase.apps/btg-manager-api.json"
+      },
+      "configurations": {
+        "production": {
+          "command": "firebase --config=firebase.apps/btg-manager-api.json"
+        }
+      }
+    },
+    "killports": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "kill-port --port 9099,5001,8080,9000,5000,8085,9199,9299,4000,4400,4500"
+      }
+    },
+    "getconfig": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run apps/btg-manager-api:firebase functions:config:get > apps/btg-manager-api/environment/.runtimeconfig.json"
+      }
+    },
+    "emulate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run apps/btg-manager-api:killports",
+          "nx run apps/btg-manager-api:firebase emulators:start --import=apps/btg-manager-api/.emulators --export-on-exit"
+        ],
+        "parallel": false
+      }
+    },
+    "serve": {
+      "executor": "@simondotm/nx-firebase:serve",
+      "options": {
+        "commands": [
+          "nx run apps/btg-manager-api:watch",
+          "nx run apps/btg-manager-api:emulate"
+        ]
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "command": "nx run apps/btg-manager-api:firebase deploy"
+      }
+    }
+  },
+  "tags": [
+    "firebase:app",
+    "firebase:name:apps/btg-manager-api"
+  ]
+}
