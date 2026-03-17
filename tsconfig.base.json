@@ -16,6 +16,9 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["@btg-funds-manager/source"]
+    "customConditions": ["@btg-funds-manager/source"],
+    "paths": {
+      "@btg-funds-manager/contracts": ["libs/shared/contracts/src/index.ts"]
+    }
   }
 }
