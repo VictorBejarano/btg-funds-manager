@@ -11,8 +11,8 @@ class FundsBloc extends Bloc<FundsEvent, FundsState> {
   final FirebaseFunctions _functions;
 
   FundsBloc({required FirebaseFunctions functions})
-      : _functions = functions,
-        super(FundsInitial()) {
+    : _functions = functions,
+      super(FundsInitial()) {
     on<LoadFundsRequested>(_onLoadFundsRequested);
     on<FundDetailRequested>(_onFundDetailRequested);
     on<ModifyFundRequested>(_onModifyFundRequested);
@@ -24,17 +24,21 @@ class FundsBloc extends Bloc<FundsEvent, FundsState> {
   ) async {
     emit(FundsLoadInProgress());
     try {
-      final HttpsCallable callable = _functions.httpsCallable('getFunds');
+      final HttpsCallable callable = _functions.httpsCallable('getfunds');
       final result = await callable.call();
-      
+
       final List<dynamic> data = result.data as List<dynamic>;
-      final funds = data
-          .map((json) => Fund.fromJson(Map<String, dynamic>.from(json as Map)))
-          .toList();
-          
+      final funds = data.map((json) {
+        return Fund.fromJson(Map<String, dynamic>.from(json as Map));
+      }).toList();
+
       emit(FundsLoadSuccess(funds));
     } on FirebaseFunctionsException catch (e) {
-      emit(FundsLoadFailure(e.message ?? 'Error desconocido de Firebase Functions'));
+      emit(
+        FundsLoadFailure(
+          e.message ?? 'Error desconocido de Firebase Functions',
+        ),
+      );
     } catch (e) {
       emit(FundsLoadFailure(e.toString()));
     }
@@ -48,11 +52,15 @@ class FundsBloc extends Bloc<FundsEvent, FundsState> {
     try {
       final HttpsCallable callable = _functions.httpsCallable('getFundDetail');
       final result = await callable.call({'fundId': event.fundId});
-      
+
       final fund = Fund.fromJson(Map<String, dynamic>.from(result.data as Map));
       emit(FundDetailLoadSuccess(fund));
     } on FirebaseFunctionsException catch (e) {
-      emit(FundDetailLoadFailure(e.message ?? 'Error desconocido de Firebase Functions'));
+      emit(
+        FundDetailLoadFailure(
+          e.message ?? 'Error desconocido de Firebase Functions',
+        ),
+      );
     } catch (e) {
       emit(FundDetailLoadFailure(e.toString()));
     }
@@ -66,10 +74,14 @@ class FundsBloc extends Bloc<FundsEvent, FundsState> {
     try {
       final HttpsCallable callable = _functions.httpsCallable('modifyFund');
       await callable.call(event.fund.toJson());
-      
+
       emit(FundModificationSuccess());
     } on FirebaseFunctionsException catch (e) {
-      emit(FundModificationFailure(e.message ?? 'Error desconocido de Firebase Functions'));
+      emit(
+        FundModificationFailure(
+          e.message ?? 'Error desconocido de Firebase Functions',
+        ),
+      );
     } catch (e) {
       emit(FundModificationFailure(e.toString()));
     }

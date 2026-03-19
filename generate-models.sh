@@ -3,7 +3,7 @@
 # 1. Definimos las rutas base
 SCHEMA_DIR="libs/shared/contracts/src/lib/schemas"
 TS_OUT_DIR="libs/shared/contracts/src/lib/models"
-DART_OUT_DIR="libs/mobile-core/lib/models"
+DART_OUT_DIR="apps/flutter-app/lib/models"
 
 # 2. Nos aseguramos de que las carpetas de destino existan
 mkdir -p "$TS_OUT_DIR"
@@ -30,9 +30,9 @@ for SCHEMA_FILE in "$SCHEMA_DIR"/*.schema.json; do
     --just-types
 
   # Generar Dart (Flutter)
-  echo "   -> Generando ${BASENAME}_model.dart"
+  echo "   -> Generando ${BASENAME}.dart"
   npx quicktype -s schema "$SCHEMA_FILE" \
-    -o "$DART_OUT_DIR/${BASENAME}_model.dart" \
+    -o "$DART_OUT_DIR/${BASENAME}.dart" \
     --null-safety
     
 done
