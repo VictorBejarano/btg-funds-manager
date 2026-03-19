@@ -3,7 +3,15 @@
   "title": "Investment Fund",
   "description": "Esquema para la validación de fondos de inversión de BTG Pactual",
   "type": "object",
-  "required": ["id", "name", "category", "minInvestment", "targetApy", "status", "createdAt"],
+  "required": [
+    "id",
+    "name",
+    "category",
+    "minInvestment",
+    "targetApy",
+    "status",
+    "createdAt"
+  ],
   "properties": {
     "id": {
       "type": "string",
@@ -17,7 +25,16 @@
     },
     "category": {
       "type": "string",
-      "enum": ["Acciones", "Deuda", "Fondo Inmobiliario", "Renta Fija"],
+      "enum": [
+        "Acciones",
+        "Deuda",
+        "Fondo Inmobiliario",
+        "Renta Fija",
+        "Sostenible",
+        "Commodities",
+        "Multiactivo",
+        "Infraestructura"
+      ],
       "description": "Categoría o tipo de activo del fondo"
     },
     "minInvestment": {

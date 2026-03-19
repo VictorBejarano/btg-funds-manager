@@ -37,9 +37,13 @@ export interface Fund {
  */
 export enum Category {
     Acciones = "Acciones",
+    Commodities = "Commodities",
     Deuda = "Deuda",
     FondoInmobiliario = "Fondo Inmobiliario",
+    Infraestructura = "Infraestructura",
+    Multiactivo = "Multiactivo",
     RentaFija = "Renta Fija",
+    Sostenible = "Sostenible",
 }
 
 /**

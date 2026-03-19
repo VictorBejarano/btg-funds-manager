@@ -11,7 +11,11 @@ const db = getFirestore();
 
 export const getfunds = onCall(async (request) => {
   try {
-    const snapshot = await db.collection('funds').get();
+    const snapshot = await db
+      .collection('funds')
+      .where('status', '==', 'ACTIVE')
+      .orderBy('createdAt', 'desc')
+      .get();
     const fundsList = snapshot.docs.map((doc) => {
       const data = doc.data();
       return {

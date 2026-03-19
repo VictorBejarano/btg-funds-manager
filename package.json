@@ -2,7 +2,9 @@
   "name": "@btg-funds-manager/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "deploy-api": "nx reset && rm -rf dist/apps/btg-manager-api && nx deploy btg-manager-api"
+  },
   "private": true,
   "devDependencies": {
     "@angular-devkit/core": "~21.1.0",
