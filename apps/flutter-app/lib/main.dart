@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'routes/routes.dart';
+import 'bloc/bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,22 +17,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: AuthWrapper.route,
-      onGenerateRoute: (RouteSettings settings) {
-        switch (settings.name) {
-          case AuthWrapper.route:
-            return MaterialPageRoute(builder: (context) => const AuthWrapper());
-          case HomePage.route:
-            return MaterialPageRoute(builder: (context) => const HomePage());
-          case LoginPage.route:
-            return MaterialPageRoute(builder: (context) => const LoginPage());
-          case '/profile':
-            return MaterialPageRoute(builder: (context) => const ProfilePage());
-          default:
-            return MaterialPageRoute(builder: (context) => const ErrorPage());
-        }
-      },
+    return BlocProvider(
+      create: (context) => LoginBloc(auth: FirebaseAuth.instance),
+      child: MaterialApp(
+        initialRoute: AuthWrapper.route,
+        onGenerateRoute: (RouteSettings settings) {
+          switch (settings.name) {
+            case AuthWrapper.route:
+              return MaterialPageRoute(
+                builder: (context) => const AuthWrapper(),
+              );
+            case HomePage.route:
+              return MaterialPageRoute(builder: (context) => const HomePage());
+            case LoginPage.route:
+              return MaterialPageRoute(builder: (context) => const LoginPage());
+            case '/profile':
+              return MaterialPageRoute(
+                builder: (context) => const ProfilePage(),
+              );
+            default:
+              return MaterialPageRoute(builder: (context) => const ErrorPage());
+          }
+        },
+      ),
     );
   }
 }

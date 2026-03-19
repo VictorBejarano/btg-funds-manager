@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/bloc.dart';
 import '../home/home.dart';
 import '../login/login.dart';
 
@@ -17,38 +17,34 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   void initState() {
     super.initState();
-    // Ejecutar la redirección después del primer frame
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkAuth());
-  }
-
-  Future<void> _checkAuth() async {
-    // Obtener el estado de autenticación actual de forma asíncrona
-    final user = await FirebaseAuth.instance.authStateChanges().first;
-
-    if (!mounted) return;
-
-    if (user != null) {
-      // Redirigir a Home sin opción de regresar
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        HomePage.route,
-        (route) => false,
-      );
-    } else {
-      // Redirigir a Login sin opción de regresar
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        LoginPage.route,
-        (route) => false,
-      );
-    }
+    // Iniciar el chequeo de autenticación a través del Bloc
+    context.read<LoginBloc>().add(AuthCheckRequested());
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state is LoginSuccess) {
+          // Redirigir a Home sin opción de regresar
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            HomePage.route,
+            (route) => false,
+          );
+        } else if (state is LoginInitial || state is LoginFailure) {
+          // Redirigir a Login si no hay sesión o falló la verificación
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            LoginPage.route,  
+            (route) => false,
+          );
+        }
+      },
+      child: const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }
