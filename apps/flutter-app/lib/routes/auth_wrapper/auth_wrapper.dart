@@ -17,7 +17,6 @@ class _AuthWrapperState extends State<AuthWrapper> {
   @override
   void initState() {
     super.initState();
-    // Iniciar el chequeo de autenticación a través del Bloc
     context.read<LoginBloc>().add(AuthCheckRequested());
   }
 
@@ -26,14 +25,12 @@ class _AuthWrapperState extends State<AuthWrapper> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccess) {
-          // Redirigir a Home sin opción de regresar
           Navigator.pushNamedAndRemoveUntil(
             context,
             HomePage.route,
             (route) => false,
           );
         } else if (state is LoginInitial || state is LoginFailure) {
-          // Redirigir a Login si no hay sesión o falló la verificación
           Navigator.pushNamedAndRemoveUntil(
             context,
             LoginPage.route,  
