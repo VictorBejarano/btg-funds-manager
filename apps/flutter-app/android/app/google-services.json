@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "865755466850",
+    "project_id": "btg-funds-manager",
+    "storage_bucket": "btg-funds-manager.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865755466850:android:c3678a7e2163562534953b",
+        "android_client_info": {
+          "package_name": "com.btgfundsmanager.flutter.flutter_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnn-ZN8DDbFsIFpt-co36d-jhHZR6Ma7g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -21,6 +21,12 @@
       "options": {
         "jestConfig": "libs/shared/contracts/jest.config.cts"
       }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash generate-models.sh"
+      }
     }
   }
 }

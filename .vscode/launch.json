@@ -1,0 +1,49 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "flutter-app",
+            "cwd": "apps\\flutter-app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "flutter-app (profile mode)",
+            "cwd": "apps\\flutter-app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "flutter-app (release mode)",
+            "cwd": "apps\\flutter-app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "mobile-core",
+            "cwd": "libs\\mobile-core",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "mobile-core (profile mode)",
+            "cwd": "libs\\mobile-core",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "mobile-core (release mode)",
+            "cwd": "libs\\mobile-core",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
