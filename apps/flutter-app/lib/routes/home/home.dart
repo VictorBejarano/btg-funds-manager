@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/bloc.dart';
 import '../login/login.dart';
 
+import 'views/funds_view.dart';
+import 'views/history_view.dart';
+import 'views/profile_view.dart';
+
 class HomePage extends StatefulWidget {
   static const String route = '/home';
 
@@ -21,10 +25,10 @@ class _HomePageState extends State<HomePage> {
     'Perfil',
   ];
 
-  final List<Widget> _pages = [
-    const Center(child: Text('Pantalla de Fondos')),
-    const Center(child: Text('Pantalla de Histórico')),
-    const Center(child: Text('Pantalla de Perfil')),
+  final List<Widget> _pages = const [
+    FundsView(),
+    HistoryView(),
+    ProfileView(),
   ];
 
   void _onItemTapped(int index) {
