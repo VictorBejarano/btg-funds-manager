@@ -2,5 +2,6 @@
   "targets": {
   },
   "projects": {
+    "staging": "btg-funds-manager"
   }
 }

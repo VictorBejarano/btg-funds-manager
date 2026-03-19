@@ -5,14 +5,10 @@
   "firestore": {
     "rules": "apps/firebase-app/firestore.rules",
     "indexes": "apps/firebase-app/firestore.indexes.json"
-  },    
+  },
   "hosting": {
     "public": "apps/firebase-app/public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
@@ -21,9 +17,16 @@
     ]
   },
   "storage": {
-      "rules": "apps/firebase-app/storage.rules"
+    "rules": "apps/firebase-app/storage.rules"
   },
-  "functions": [],
+  "functions": [
+    {
+      "codebase": "btg-manager-api",
+      "source": "dist/apps/btg-manager-api",
+      "runtime": "nodejs20",
+      "ignore": ["*.local"]
+    }
+  ],
   "emulators": {
     "auth": {
       "port": 9099

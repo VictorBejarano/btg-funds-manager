@@ -2,12 +2,11 @@
   "name": "apps/firebase-app",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
+  "tags": ["firebase:app", "firebase:name:apps/firebase-app"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "options": {
         "command": "echo Build succeeded."
       }
@@ -33,11 +32,11 @@
     "firebase": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "firebase --config=firebase.json"
+        "command": "firebase --config=firebase.json --project=btg-funds-manager"
       },
       "configurations": {
         "production": {
-          "command": "firebase --config=firebase.json"
+          "command": "firebase --config=firebase.json --project=btg-funds-manager"
         }
       }
     },
@@ -74,16 +73,11 @@
     },
     "deploy": {
       "executor": "nx:run-commands",
-      "dependsOn": [
-        "build"
-      ],
+      "dependsOn": ["build"],
       "options": {
         "command": "nx run apps/firebase-app:firebase deploy"
       }
     }
   },
-  "tags": [
-    "firebase:app",
-    "firebase:name:apps/firebase-app"
-  ]
+  "implicitDependencies": ["apps/btg-manager-api"]
 }
