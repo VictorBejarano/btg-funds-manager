@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'routes/routes.dart';
 import 'bloc/bloc.dart';
 
@@ -17,8 +18,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => LoginBloc(auth: FirebaseAuth.instance),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LoginBloc(auth: FirebaseAuth.instance),
+        ),
+        BlocProvider(
+          create: (context) => FundsBloc(functions: FirebaseFunctions.instance),
+        ),
+      ],
       child: MaterialApp(
         initialRoute: AuthWrapper.route,
         onGenerateRoute: (RouteSettings settings) {
@@ -31,10 +39,6 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (context) => const HomePage());
             case LoginPage.route:
               return MaterialPageRoute(builder: (context) => const LoginPage());
-            case '/profile':
-              return MaterialPageRoute(
-                builder: (context) => const ProfilePage(),
-              );
             default:
               return MaterialPageRoute(builder: (context) => const ErrorPage());
           }
@@ -44,26 +48,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile Page')),
-      body: const Center(child: Text('Welcome to the Profile Page!')),
-    );
-  }
-}
-
-class ErrorPage extends StatelessWidget {
-  const ErrorPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Error Page')),
-      body: const Center(child: Text('Oops! Page not found.')),
-    );
-  }
-}
