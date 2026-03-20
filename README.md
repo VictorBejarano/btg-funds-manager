@@ -15,18 +15,31 @@ Esta aplicación está diseñada para la gestión de fondos de inversión. Compa
 
 ## Herramientas utilizadas
 
+<a href="https://firebase.google.com/" target="_blank">
+  <img src="https://github.com/VictorBejarano/btg-funds-manager/blob/main/assets/doc/logo_firebase.png?raw=true" height="80px">
+</a>
 <a href="https://flutter.dev/" target="_blank">
-  <img src="https://github.com/VictorBejarano/flutter_form/blob/main/assets/doc/logo_flutter.png?raw=true" height="80px">
+  <img src="https://github.com/VictorBejarano/btg-funds-manager/blob/main/assets/doc/logo_flutter.png?raw=true" height="80px">
+</a>
+<a href="https://angular.dev/" target="_blank">
+  <img src="https://github.com/VictorBejarano/btg-funds-manager/blob/main/assets/doc/logo_angular.png?raw=true" height="80px">
 </a>
 <a href="https://dart.dev/" target="_blank">
-  <img src="https://github.com/VictorBejarano/flutter_form/blob/main/assets/doc/logo_dart.png?raw=true" height="80px">
+  <img src="https://github.com/VictorBejarano/btg-funds-manager/blob/main/assets/doc/logo_dart.png?raw=true" height="80px">
 </a>
 <a href="https://bloclibrary.dev/" target="_blank">
-  <img src="https://github.com/VictorBejarano/flutter_form/blob/main/assets/doc/logo_bloc.png?raw=true" height="80px">
+  <img src="https://github.com/VictorBejarano/btg-funds-manager/blob/main/assets/doc/logo_bloc.png?raw=true" height="80px">
+</a>
+<a href="https://ngrx.io/" target="_blank">
+  <img src="https://github.com/VictorBejarano/btg-funds-manager/blob/main/assets/doc/logo_ngrx.png?raw=true" height="80px">
 </a>
 <a href="https://www.android.com/" target="_blank">
-  <img src="https://github.com/VictorBejarano/flutter_form/blob/main/assets/doc/logo_android.png?raw=true" height="80px">
+  <img src="https://github.com/VictorBejarano/btg-funds-manager/blob/main/assets/doc/logo_android.png?raw=true" height="80px">
 </a>
+<a href="https://nx.dev/" target="_blank">
+  <img src="https://github.com/VictorBejarano/btg-funds-manager/blob/main/assets/doc/logo_nx.png?raw=true" height="80px">
+</a>
+
 
 ## Ejecutar el proyecto
 
@@ -64,7 +77,7 @@ Para ejecutar el proyecto, asegúrate de tener un equipo con Windows, Linux o Ma
 
 Para instalar la aplicación en tu dispositivo Android, sigue estos pasos:
 
-1. **Descarga del Archivo APK:** Descarga el archivo APK desde la sección de [releases](https://github.com/VictorBejarano/flutter_form/releases) del repositorio.
+1. **Descarga del Archivo APK:** Descarga el archivo APK desde la sección de [releases](https://github.com/VictorBejarano/btg-funds-manager/releases) del repositori.
 
 2. **Transferencia del Archivo:** Se recomienda transferir el archivo directamente desde un dispositivo Android o mediante un cable USB conectado a una PC.
 
@@ -86,18 +99,23 @@ Al tener configurado en la terminal el proyecto de firebase, sigue estos pasos:
    ```
 ## Otras funciones
 
-- **Actualizacion de modelos:** este proyecto maneja la libreria de [quicktype](https://quicktype.io/), el cual genera los modelos para flutter y Typescript siguiendo el estandar de [JSON Schema](https://json-schema.org/docs),
+- **Actualizacion de modelos:** este proyecto maneja la libreria de [quicktype](https://quicktype.io/), el cual genera los modelos para flutter y Typescript siguiendo el estandar de [JSON Schema](https://json-schema.org/docs)
+   ```
+   npm run generate-models
+   ```
+- **Gererar build de functions:** para generar el build de functions se ejecuta este comando
+   ```
+   npm run build-api
+   ```
+- **Emular firebase functions:** para emular y testear las functions de firebase u otras funcionalidades sin necesidad de desplegar.
+   ```
+   npm run emulate-api
+   ```
+- **Generar fondos de prueba:** para las pruebas en un proyecto nuevo no se cuenta con una base de datos bastante llena de informacion, para eso hay un script que permite crear un set de datos de pruebas.
+    1. Ingresar a este enlace de  [OAuth 2.0 Playground](https://developers.google.com/oauthplayground/)
+    2. En el paso 1 buscar el scopes Cloud Firestore V1 y seleccionar todas las opciones de "Authorize APIs".
+    3. Seguir hasta que se genere el Access Token y con el se aplica en el archivo de ```seed_funds.sh``` y posteriormente en la consola ejecuta el siguiente comando:
 
-
-## Instrucciones de uso.
-
-- Abrir la aplicacion Flutter Form.
-- Al ingresar saldra la ventana de home donse se visualiza el logo de la aplicacion y un boton de continuar
-- La siguiente ventana donde se observa el listado por defecto que tambien se puede ver en archivo json dando clic [acá](https://github.com/VictorBejarano/flutter_form/blob/main/assets/json/user.json?raw=true).
-- Cuando se da clic en el boton de crear saldra un formulario en el cual se deben ingresar los datos solicitados, todos son requeridos.
-  Al finalizar se debe dar clic en el boton crear y el nuevo usuario saldra en el listado
-- Al dar tap sobre una de las tarjetas saldra el formulario donde solo se puede ver los datos del usuario donde se puede dar tap en el boton editar o el boton eliminar
-- Para editar el usuario se da tap en el boton editar y se puede modificar el usuario incluyendo el listado de direcciones.
-- Para eliminar el usuario se debe dar tap en el usuario y solo basta con dar en el boton eliminar.
-- Para refrescar los datos solo basta con deslizar el listado hasta abajo y el listado vuelve a estar por defecto
-- Tambien cuando se eliminan todas los usuarios agregados solo es dar tap sobre el boton actualizar de la siguiente imagen.
+        ```
+        ./seed_funds.sh
+        ```
