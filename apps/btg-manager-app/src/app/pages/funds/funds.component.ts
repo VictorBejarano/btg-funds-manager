@@ -22,6 +22,10 @@ export class FundsComponent implements OnInit {
   subscriptionAmounts: { [key: string]: number } = {};
   isSubscribing = false; // Add to prevent double clicks
 
+  // Fund detail modal state
+  selectedFund: Fund | null = null;
+  isFundModalOpen = false;
+
   ngOnInit() {
     this.fundsStore.loadFunds();
     this.userStore.reloadProfile();
@@ -59,5 +63,15 @@ export class FundsComponent implements OnInit {
     if (this.fundsStore.subscriptionMessage()) {
       await this.userStore.loadUserData();
     }
+  }
+
+  openFundModal(fund: Fund) {
+    this.selectedFund = fund;
+    this.isFundModalOpen = true;
+  }
+
+  closeFundModal() {
+    this.selectedFund = null;
+    this.isFundModalOpen = false;
   }
 }

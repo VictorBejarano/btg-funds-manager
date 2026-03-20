@@ -32,12 +32,14 @@
 
 <div class="funds-grid" *ngIf="!fundsStore.loading() && fundsStore.funds().length > 0">
   <div class="fund-card" *ngFor="let fund of fundsStore.funds()">
-    <div class="card-header">
-      <div class="fund-category">{{ fund.category }}</div>
-      <div class="min-amount">Min: {{ fund.minInvestment | currency:'COP':'symbol':'1.0-0' }}</div>
-    </div>
+    <div class="card-main-area" (click)="openFundModal(fund)">
+      <div class="card-header">
+        <div class="fund-category">{{ fund.category }}</div>
+        <div class="min-amount">Min: {{ fund.minInvestment | currency:'COP':'symbol':'1.0-0' }}</div>
+      </div>
 
-    <h3 class="fund-name">{{ fund.name }}</h3>
+      <h3 class="fund-name">{{ fund.name }}</h3>
+    </div>
 
     <div class="fund-actions">
       <input type="number" [(ngModel)]="subscriptionAmounts[fund.id]" placeholder="Mondo a invertir"
@@ -45,6 +47,49 @@
       <button class="action-btn" [disabled]="isSubscribing || !isValidAmount(fund)" (click)="subscribe(fund)">
         {{ isSubscribing ? 'Procesando...' : 'Suscribir' }}
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- Fund Detail Modal -->
+<div class="modal-overlay" *ngIf="isFundModalOpen">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Detalle del Fondo</h3>
+      <button class="close-modal-btn" (click)="closeFundModal()">×</button>
+    </div>
+
+    <div class="modal-body" *ngIf="selectedFund">
+      <div class="fund-detail-header">
+        <div class="fund-avatar">{{ selectedFund.name.charAt(0) }}</div>
+        <div class="fund-title">
+          <h4>{{ selectedFund.name }}</h4>
+          <span class="fund-category-badge">{{ selectedFund.category }}</span>
+        </div>
+      </div>
+
+      <div class="detail-info-grid">
+        <div class="info-item">
+          <span class="info-label">Inversión Mínima</span>
+          <span class="info-value">{{ selectedFund.minInvestment | currency:'COP':'symbol':'1.0-0' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Rendimiento Estimado (APY)</span>
+          <span class="info-value highlight-apy">{{ selectedFund.targetApy }}%</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Estado</span>
+          <span class="info-value status-active">{{ selectedFund.status }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">ID del Fondo</span>
+          <span class="info-value small-text">{{ selectedFund.id }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" (click)="closeFundModal()">Cerrar</button>
     </div>
   </div>
 </div>
