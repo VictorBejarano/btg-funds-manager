@@ -1,6 +1,6 @@
-// 🚀 Archivo generado automáticamente por el script de modelos
-// No editar manualmente
+// No editar manualmente. Generado automáticamente.
 
 export * from './fund';
+export * from './fundSubscriptionData';
 export * from './subscription';
 export * from './user';

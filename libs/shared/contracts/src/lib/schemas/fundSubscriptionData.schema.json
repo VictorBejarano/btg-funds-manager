@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FundSubscriptionData",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string",
+      "description": "El identificador único del usuario (UID)",
+      "minLength": 1
+    },
+    "fundId": {
+      "type": "string",
+      "description": "El identificador único del fondo",
+      "minLength": 1
+    },
+    "amount": {
+      "type": "number",
+      "description": "El monto de la transacción",
+      "minimum": 0.01
+    }
+  },
+  "required": ["userId", "fundId", "amount"],
+  "additionalProperties": false
+}

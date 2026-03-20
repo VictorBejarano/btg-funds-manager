@@ -95,11 +95,7 @@ class FundsBloc extends Bloc<FundsEvent, FundsState> {
     emit(FundSubscriptionInProgress());
     try {
       final HttpsCallable callable = _functions.httpsCallable('subscribefund');
-      final result = await callable.call({
-        'userId': event.userId,
-        'fundId': event.fundId,
-        'amount': event.amount,
-      });
+      final result = await callable.call(event.data.toJson());
 
       final String msg = result.data['message'] ?? 'Suscripción exitosa';
       emit(FundSubscriptionSuccess(msg));

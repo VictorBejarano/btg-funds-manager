@@ -11,7 +11,7 @@ mkdir -p "$TS_OUT_DIR"
 mkdir -p "$DART_OUT_DIR"
 
 # 3. Limpiamos o creamos el index.ts desde cero
-echo "// No editar manualmente" >> "$INDEX_FILE"
+echo "// No editar manualmente. Generado automáticamente." > "$INDEX_FILE"
 echo "" >> "$INDEX_FILE"
 
 echo "🚀 Iniciando generación masiva de modelos..."

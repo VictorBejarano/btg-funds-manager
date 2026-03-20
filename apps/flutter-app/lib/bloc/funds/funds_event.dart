@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_app/models/fundSubscriptionData.dart';
 import '../../models/fund.dart';
 
 abstract class FundsEvent extends Equatable {
@@ -29,16 +30,13 @@ class ModifyFundRequested extends FundsEvent {
 }
 
 class SubscribeFundRequested extends FundsEvent {
-  final String fundId;
-  final String userId;
-  final double amount;
+
+  final FundSubscriptionData data;
 
   const SubscribeFundRequested({
-    required this.fundId,
-    required this.userId,
-    required this.amount,
+    required this.data,
   });
 
   @override
-  List<Object?> get props => [fundId, userId, amount];
+  List<Object?> get props => [data];
 }

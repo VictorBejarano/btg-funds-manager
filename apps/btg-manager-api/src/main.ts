@@ -3,7 +3,7 @@ import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as logger from 'firebase-functions/logger';
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
-import { Fund } from '@btg-funds-manager/contracts';
+import { Fund, FundSubscriptionData } from '@btg-funds-manager/contracts';
 
 setGlobalOptions({ maxInstances: 10 });
 
@@ -37,7 +37,7 @@ export const getfunds = onCall(async (request) => {
   }
 });
 
-export const subscribefund = onCall(async (request) => {
+export const subscribefund = onCall<FundSubscriptionData>(async (request) => {
   const data = request.data;
   const userId = data.userId;
   const fundId = data.fundId;
