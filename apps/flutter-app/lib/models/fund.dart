@@ -67,25 +67,13 @@ class Fund {
 
 ///Categoría o tipo de activo del fondo
 enum Category {
-    ACCIONES,
-    COMMODITIES,
-    DEUDA,
-    FONDO_INMOBILIARIO,
-    INFRAESTRUCTURA,
-    MULTIACTIVO,
-    RENTA_FIJA,
-    SOSTENIBLE
+    FIC,
+    FPV
 }
 
 final categoryValues = EnumValues({
-    "Acciones": Category.ACCIONES,
-    "Commodities": Category.COMMODITIES,
-    "Deuda": Category.DEUDA,
-    "Fondo Inmobiliario": Category.FONDO_INMOBILIARIO,
-    "Infraestructura": Category.INFRAESTRUCTURA,
-    "Multiactivo": Category.MULTIACTIVO,
-    "Renta Fija": Category.RENTA_FIJA,
-    "Sostenible": Category.SOSTENIBLE
+    "FIC": Category.FIC,
+    "FPV": Category.FPV
 });
 
 
