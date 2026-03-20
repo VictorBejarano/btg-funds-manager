@@ -77,7 +77,10 @@
 
         <div class="tx-details">
           <h4>{{ tx.type === 'subscribe' ? 'Suscrito a' : 'Cancelado' }} {{ tx.fundName }}</h4>
-          <span class="tx-date">{{ tx.createdAt | date:'medium' }}</span>
+          <div class="tx-meta">
+            <span class="tx-date">{{ tx.createdAt | date:'medium' }}</span>
+            <span class="tx-status-badge" [ngClass]="'status-' + tx.status">{{ tx.status }}</span>
+          </div>
         </div>
 
         <div class="tx-amount" [ngClass]="tx.type === 'subscribe' ? 'amount-negative' : 'amount-positive'">
