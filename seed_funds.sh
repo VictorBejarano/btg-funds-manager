@@ -2,11 +2,11 @@
 
 PROJECT_ID="btg-funds-manager"
 COLLECTION="funds"
-TOKEN="INGRESE TOKEN DE OAuth 2.0 Playground"
+# Recuerda no subir este token a GitHub (puedes usar: TOKEN=$(gcloud auth print-access-token))
+TOKEN="ya29.a0ATkoCc7Jw6yd3mPW1HSS3Z8qzMHvy-6-6EqdxIYxboAF7bpYNt_bOn23L8GN9B1bS1yDN2by7DhR42U6s63eXvMz20LstUi8HOp295KQofQQCtTKwq7dDOp6nrssgOL6Y9tSIbZTi36U8TbDbjTeKgU-1NvOIG5jH3LX2fpLfq0Z3-Mx6ChkKJm2B0zn8yfmHQI4Pq8aCgYKAQcSARASFQHGX2MiyDv0h94WR1KWhca3DNDHgQ0206"
 
-echo "🚀 Iniciando carga con IDs auto-asignados por Firestore..."
+echo "🚀 Iniciando carga con categorías FPV/FIC aleatorias..."
 
-# Definición de fondos
 names=(
   "Fondo Acciones Global" "Renta Fija Colombia" "Dinamismo Inmobiliario"
   "BTG Pactual Liquidez" "Acciones Petróleo & Gas" "Fondo Deuda Privada"
@@ -21,55 +21,32 @@ names=(
   "Fondo Ganadero" "Renta Inmobiliaria Bodegas" "BTG Conservador"
 )
 
-cats=(
-  "Acciones" "Deuda" "Fondo Inmobiliario"
-  "Renta Fija" "Acciones" "Deuda"
-  "Acciones" "Sostenible" "Renta Fija"
-  "Deuda" "Acciones" "Renta Fija"
-  "Fondo Inmobiliario" "Commodities" "Multiactivo"
-  "Infraestructura" "Multiactivo" "Acciones"
-  "Deuda" "Acciones" "Deuda"
-  "Renta Fija" "Multiactivo" "Renta Fija"
-  "Commodities" "Acciones" "Deuda"
-  "Sostenible" "Acciones" "Acciones"
-  "Commodities" "Fondo Inmobiliario" "Renta Fija"
-)
-
 mins=(
-  50000 100000 500000
-  10000 200000 150000
-  300000 50000 25000
-  120000 250000 15000
-  1000000 400000 200000
-  750000 100000 80000
-  90000 350000 50000
-  45000 150000 20000
-  600000 400000 100000
-  50000 300000 100000
-  250000 850000 15000
+  50000 100000 500000 10000 200000 150000 300000 50000 25000
+  120000 250000 15000 1000000 400000 200000 750000 100000 80000
+  90000 350000 50000 45000 150000 20000 600000 400000 100000
+  50000 300000 100000 250000 850000 15000
 )
 
 apys=(
-  12.5 9.8 15.2
-  8.2 18.4 10.5
-  14.1 11.2 7.9
-  9.2 22.5 8.5
-  13.8 19.1 11.5
-  16.4 10.2 13.5
-  10.8 17.2 12.1
-  8.9 14.5 9.1
-  20.5 18.9 9.5
-  11.8 25.4 12.8
-  15.5 14.2 8.1
+  12.5 9.8 15.2 8.2 18.4 10.5 14.1 11.2 7.9
+  9.2 22.5 8.5 13.8 19.1 11.5 16.4 10.2 13.5
+  10.8 17.2 12.1 8.9 14.5 9.1 20.5 18.9 9.5
+  11.8 25.4 12.8 15.5 14.2 8.1
 )
+
+# Opciones de categoría legal
+options=("FPV" "FIC")
 
 for i in ${!names[@]}; do
     NAME=${names[$i]}
-    CAT=${cats[$i]}
     MIN=${mins[$i]}
     APY=${apys[$i]}
+    
+    # Seleccionar categoría aleatoria (FPV o FIC)
+    CAT=${options[$RANDOM % 2]}
 
-    echo "📦 Insertando: $NAME..."
+    echo "📦 Insertando [$CAT]: $NAME..."
 
     JSON_BODY="{
       \"fields\": {
@@ -91,9 +68,10 @@ for i in ${!names[@]}; do
     if [[ $RESPONSE == *"error"* ]]; then
         echo "❌ Error al insertar $NAME: $RESPONSE"
     else
+        # Extraer ID de la respuesta de Firestore
         NEW_ID=$(echo $RESPONSE | sed -e 's/.*"name": "\(.*\)".*/\1/' | awk -F'/' '{print $NF}')
         echo "✅ Insertado con ID: $NEW_ID"
     fi
 done
 
-echo "🎉 Proceso terminado. ¡Revisa tu consola de Firebase!"
+echo "🎉 Proceso terminado. ¡Revisa tu consola de Firebase en Bogotá!"

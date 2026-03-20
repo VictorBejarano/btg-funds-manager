@@ -25,16 +25,7 @@
     },
     "category": {
       "type": "string",
-      "enum": [
-        "Acciones",
-        "Deuda",
-        "Fondo Inmobiliario",
-        "Renta Fija",
-        "Sostenible",
-        "Commodities",
-        "Multiactivo",
-        "Infraestructura"
-      ],
+      "enum": ["FPV", "FIC"],
       "description": "Categoría o tipo de activo del fondo"
     },
     "minInvestment": {
