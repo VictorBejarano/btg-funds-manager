@@ -7,7 +7,8 @@
     "indexes": "apps/firebase-app/firestore.indexes.json"
   },
   "hosting": {
-    "public": "apps/firebase-app/public",
+    "target": "btg-manager-app", 
+    "public": "dist/apps/btg-manager-app/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
