@@ -29,3 +29,23 @@ class SubscriptionsLoadFailure extends SubscriptionsState {
   @override
   List<Object?> get props => [error];
 }
+
+class UnsubscriptionInProgress extends SubscriptionsState {}
+
+class UnsubscriptionSuccess extends SubscriptionsState {
+  final String message;
+
+  const UnsubscriptionSuccess(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class UnsubscriptionFailure extends SubscriptionsState {
+  final String error;
+
+  const UnsubscriptionFailure(this.error);
+
+  @override
+  List<Object?> get props => [error];
+}

@@ -15,3 +15,16 @@ class LoadSubscriptionsRequested extends SubscriptionsEvent {
   @override
   List<Object?> get props => [userId];
 }
+
+class UnsubscribeRequested extends SubscriptionsEvent {
+  final String userId;
+  final String subscriptionId;
+
+  const UnsubscribeRequested({
+    required this.userId,
+    required this.subscriptionId,
+  });
+
+  @override
+  List<Object?> get props => [userId, subscriptionId];
+}

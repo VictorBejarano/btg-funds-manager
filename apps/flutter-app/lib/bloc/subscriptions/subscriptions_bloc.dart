@@ -14,6 +14,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
     : _functions = functions,
       super(SubscriptionsInitial()) {
     on<LoadSubscriptionsRequested>(_onLoadSubscriptionsRequested);
+    on<UnsubscribeRequested>(_onUnsubscribeRequested);
   }
 
   Future<void> _onLoadSubscriptionsRequested(
@@ -23,7 +24,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
     emit(SubscriptionsLoadInProgress());
     try {
       final HttpsCallable callable = _functions.httpsCallable('getusersubscriptions');
-      
+
       // Se pasa el userId recibido en el evento como entrada a la Firebase Function
       final result = await callable.call({
         'userId': event.userId,
@@ -43,6 +44,34 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
       );
     } catch (e) {
       emit(SubscriptionsLoadFailure(e.toString()));
+    }
+  }
+
+  Future<void> _onUnsubscribeRequested(
+    UnsubscribeRequested event,
+    Emitter<SubscriptionsState> emit,
+  ) async {
+    emit(UnsubscriptionInProgress());
+    try {
+      final HttpsCallable callable = _functions.httpsCallable('unsubscribefund');
+      final result = await callable.call({
+        'userId': event.userId,
+        'subscriptionId': event.subscriptionId,
+      });
+
+      final String message = result.data['message'] ?? 'Desuscripción exitosa';
+      emit(UnsubscriptionSuccess(message));
+
+      // Opcional: Recargar la lista automáticamente tras el éxito
+      add(LoadSubscriptionsRequested(userId: event.userId));
+    } on FirebaseFunctionsException catch (e) {
+      emit(
+        UnsubscriptionFailure(
+          e.message ?? 'Error al procesar la desuscripción',
+        ),
+      );
+    } catch (e) {
+      emit(UnsubscriptionFailure(e.toString()));
     }
   }
 }
