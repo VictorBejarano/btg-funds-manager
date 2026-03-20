@@ -25,6 +25,9 @@ class Subscription {
     ///Nombre del fondo para trazabilidad histórica.
     String fundName;
     
+    ///Identificador único de la subscripcion
+    String id;
+    
     ///UID del usuario obtenido de Firebase Auth.
     String userId;
 
@@ -34,6 +37,7 @@ class Subscription {
         required this.fundId,
         required this.fundMinInvestment,
         required this.fundName,
+        required this.id,
         required this.userId,
     });
 
@@ -43,6 +47,7 @@ class Subscription {
         fundId: json["fundId"],
         fundMinInvestment: json["fundMinInvestment"],
         fundName: json["fundName"],
+        id: json["id"],
         userId: json["userId"],
     );
 
@@ -52,6 +57,7 @@ class Subscription {
         "fundId": fundId,
         "fundMinInvestment": fundMinInvestment,
         "fundName": fundName,
+        "id": id,
         "userId": userId,
     };
 }

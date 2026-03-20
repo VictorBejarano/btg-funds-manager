@@ -3,7 +3,7 @@ import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as logger from 'firebase-functions/logger';
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
-import { Fund, FundSubscriptionData } from '@btg-funds-manager/contracts';
+import { Fund, FundSubscriptionData, Subscription } from '@btg-funds-manager/contracts';
 
 setGlobalOptions({ maxInstances: 10 });
 
@@ -165,3 +165,45 @@ export const subscribefund = onCall<FundSubscriptionData>(async (request) => {
 
   return { success: true, message: '¡Te has suscrito exitosamente al fondo!' };
 });
+
+export const getusersubscriptions = onCall<{ userId: string }>(async (request) => {
+  const { userId } = request.data;
+
+  if (!userId) {
+    throw new HttpsError(
+      'invalid-argument',
+      'El campo userId es obligatorio para obtener las suscripciones.',
+    );
+  }
+
+  try {
+    const snapshot = await db
+      .collection('users')
+      .doc(userId)
+      .collection('subscriptions')
+      .orderBy('createdAt', 'desc')
+      .get();
+
+    const subscriptions = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        amount: data.amount,
+        createdAt: data.createdAt ? data.createdAt.toDate().toISOString() : null,
+        fundId: data.fundId,
+        fundMinInvestment: data.fundMinInvestment,
+        fundName: data.fundName,
+        userId: data.userId,
+      } as Subscription;
+    });
+
+    return subscriptions;
+  } catch (error) {
+    logger.error('Error fetching user subscriptions:', error);
+    throw new HttpsError(
+      'internal',
+      'No se pudo obtener el listado de suscripciones del usuario.',
+    );
+  }
+});
+

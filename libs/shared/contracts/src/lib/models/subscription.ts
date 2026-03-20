@@ -20,6 +20,10 @@ export interface Subscription {
      */
     fundName: string;
     /**
+     * Identificador único de la subscripcion
+     */
+    id: string;
+    /**
      * UID del usuario obtenido de Firebase Auth.
      */
     userId: string;

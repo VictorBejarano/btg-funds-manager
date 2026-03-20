@@ -3,6 +3,7 @@
   "title": "FundSubscription",
   "type": "object",
   "required": [
+    "id",
     "amount",
     "createdAt",
     "fundId",
@@ -11,6 +12,10 @@
     "userId"
   ],
   "properties": {
+    "id": {
+      "type": "string",
+      "description": "Identificador único de la subscripcion"
+    },
     "amount": {
       "type": "integer",
       "minimum": 0,
