@@ -1,7 +1,7 @@
 <div class="page-header">
   <div>
-    <h1>Profile & History</h1>
-    <p>Your account details and transaction history.</p>
+    <h1>Perfil y transacciones</h1>
+    <p>Los detalles de su cuenta y su historial de transacciones.</p>
   </div>
   <button class="refresh-btn" (click)="userStore.reloadProfile()">
     Refresh 🔄
@@ -9,62 +9,63 @@
 </div>
 
 <div class="profile-container">
-  
+
   <!-- User Profile Card -->
   <section class="profile-card">
     <div class="card-header">
-      <h2>Account Details</h2>
+      <h2>Detalles de la cuenta</h2>
     </div>
-    
+
     <div class="loading-state" *ngIf="userStore.loading()">
-       <div class="loader-sm"></div>
+      <div class="loader-sm"></div>
     </div>
 
     <div class="profile-details" *ngIf="!userStore.loading() && userStore.user()">
-       <div class="detail-group">
-         <div class="avatar-lg">{{ getInitials() }}</div>
-         <div class="user-meta">
-           <h3>{{ userStore.user()?.name }}</h3>
-         </div>
-       </div>
+      <div class="detail-group">
+        <div class="avatar-lg">{{ getInitials() }}</div>
+        <div class="user-meta">
+          <h3>{{ userStore.user()?.name }}</h3>
+        </div>
+      </div>
 
-       <div class="balance-display">
-         <div class="balance-label">Total Balance available</div>
-         <div class="balance-amount">{{ (userStore.user()?.availableBalance ?? 0) | currency:'COP':'symbol':'1.0-0' }}</div>
-       </div>
+      <div class="balance-display">
+        <div class="balance-label">Saldo total disponible</div>
+        <div class="balance-amount">{{ (userStore.user()?.availableBalance ?? 0) | currency:'COP':'symbol':'1.0-0' }}
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Transaction History -->
   <section class="history-card">
     <div class="card-header">
-      <h2>Transaction History</h2>
+      <h2>Historico de transacciones</h2>
     </div>
 
     <div class="loading-state" *ngIf="userStore.loading()">
-       <div class="loader-sm"></div>
-       <p>Loading transactions...</p>
+      <div class="loader-sm"></div>
+      <p>Cargando transacciones...</p>
     </div>
 
     <div class="empty-state" *ngIf="!userStore.loading() && userStore.transactions().length === 0">
-       <p>No transactions found.</p>
+      <p>No se encontraron transacciones.</p>
     </div>
 
     <div class="transactions-list" *ngIf="!userStore.loading() && userStore.transactions().length > 0">
-       <div class="transaction-item" *ngFor="let tx of userStore.transactions()">
-         <div class="tx-icon" [ngClass]="tx.type === 'subscribe' ? 'icon-sub' : 'icon-unsub'">
-            {{ tx.type === 'subscribe' ? '⬇️' : '⬆️' }}
-         </div>
-         
-         <div class="tx-details">
-           <h4>{{ tx.type === 'subscribe' ? 'Subscribed to' : 'Cancelled' }} {{ tx.fundName }}</h4>
-           <span class="tx-date">{{ tx.createdAt | date:'medium' }}</span>
-         </div>
+      <div class="transaction-item" *ngFor="let tx of userStore.transactions()">
+        <div class="tx-icon" [ngClass]="tx.type === 'subscribe' ? 'icon-sub' : 'icon-unsub'">
+          {{ tx.type === 'subscribe' ? '⬇️' : '⬆️' }}
+        </div>
 
-         <div class="tx-amount" [ngClass]="tx.type === 'subscribe' ? 'amount-negative' : 'amount-positive'">
-           {{ tx.type === 'subscribe' ? '-' : '+' }} {{ tx.amount | currency:'COP':'symbol':'1.0-0' }}
-         </div>
-       </div>
+        <div class="tx-details">
+          <h4>{{ tx.type === 'subscribe' ? 'Suscrito a' : 'Cancelado' }} {{ tx.fundName }}</h4>
+          <span class="tx-date">{{ tx.createdAt | date:'medium' }}</span>
+        </div>
+
+        <div class="tx-amount" [ngClass]="tx.type === 'subscribe' ? 'amount-negative' : 'amount-positive'">
+          {{ tx.type === 'subscribe' ? '-' : '+' }} {{ tx.amount | currency:'COP':'symbol':'1.0-0' }}
+        </div>
+      </div>
     </div>
   </section>
 

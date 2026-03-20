@@ -1,10 +1,10 @@
 <div class="page-header">
   <div>
-    <h1>Available Funds</h1>
-    <p>Discover and subscribe to top-performing funds tailored for you.</p>
+    <h1>Fondos disponibles</h1>
+    <p>Descubre y suscríbete a los fondos de mayor rendimiento diseñados a tu medida.</p>
   </div>
   <button class="refresh-btn" (click)="fundsStore.loadFunds()">
-    Refresh 🔄
+    Actualizar 🔄
   </button>
 </div>
 
@@ -21,13 +21,13 @@
 
 <div class="loading-state" *ngIf="fundsStore.loading()">
   <div class="loader-lg"></div>
-  <p>Loading available funds...</p>
+  <p>Cargando fondos disponibles...</p>
 </div>
 
 <div class="empty-state" *ngIf="!fundsStore.loading() && fundsStore.funds().length === 0">
   <div class="empty-icon">📂</div>
-  <h3>No funds available</h3>
-  <p>You may be subscribed to all available funds already, or none are currently offered.</p>
+  <h3>No hay fondos disponibles</h3>
+  <p>Es posible que ya esté suscrito a todos los fondos disponibles, o que actualmente no se ofrezca ninguno.</p>
 </div>
 
 <div class="funds-grid" *ngIf="!fundsStore.loading() && fundsStore.funds().length > 0">
@@ -36,23 +36,14 @@
       <div class="fund-category">{{ fund.category }}</div>
       <div class="min-amount">Min: {{ fund.minInvestment | currency:'COP':'symbol':'1.0-0' }}</div>
     </div>
-    
+
     <h3 class="fund-name">{{ fund.name }}</h3>
-    
+
     <div class="fund-actions">
-      <input 
-        type="number" 
-        [(ngModel)]="subscriptionAmounts[fund.id]" 
-        placeholder="Amount to invest" 
-        class="amount-input"
-        [min]="fund.minInvestment"
-      />
-      <button 
-        class="action-btn" 
-        [disabled]="isSubscribing || !isValidAmount(fund)"
-        (click)="subscribe(fund)"
-      >
-         {{ isSubscribing ? 'Processing...' : 'Subscribe' }}
+      <input type="number" [(ngModel)]="subscriptionAmounts[fund.id]" placeholder="Mondo a invertir"
+        class="amount-input" [min]="fund.minInvestment" />
+      <button class="action-btn" [disabled]="isSubscribing || !isValidAmount(fund)" (click)="subscribe(fund)">
+        {{ isSubscribing ? 'Procesando...' : 'Suscribir' }}
       </button>
     </div>
   </div>

@@ -19,7 +19,7 @@ export const getfunds = onCall<{ userId?: string }>(async (request) => {
       .where('status', '==', 'ACTIVE')
       .orderBy('createdAt', 'desc')
       .get();
-      
+
     let fundsList = snapshot.docs.map((doc) => {
       const data = doc.data();
       return {
@@ -140,7 +140,7 @@ export const subscribefund = onCall<FundSubscriptionData>(async (request) => {
 
       if (availableBalance < amount) {
         throw new Error(
-          'No tienes suficiente saldo (availableBalance) para esta suscripción.',
+          'No tienes suficiente saldo para esta suscripción.',
         );
       }
 
