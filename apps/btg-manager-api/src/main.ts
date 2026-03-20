@@ -166,6 +166,100 @@ export const subscribefund = onCall<FundSubscriptionData>(async (request) => {
   return { success: true, message: '¡Te has suscrito exitosamente al fondo!' };
 });
 
+export const unsubscribefund = onCall<{ userId: string; subscriptionId: string }>(
+  async (request) => {
+    const { userId, subscriptionId } = request.data;
+
+    if (!userId || !subscriptionId) {
+      throw new HttpsError(
+        'invalid-argument',
+        'Los campos userId y subscriptionId son obligatorios.',
+      );
+    }
+
+    const userRef = db.collection('users').doc(userId);
+    const subscriptionRef = userRef.collection('subscriptions').doc(subscriptionId);
+    const transactionRef = db.collection('transactions').doc();
+
+    const userAgent = (request.rawRequest?.headers['user-agent'] as string) || '';
+    let device = 'web';
+    if (userAgent.toLowerCase().includes('android')) device = 'android';
+    else if (
+      userAgent.toLowerCase().includes('iphone') ||
+      userAgent.toLowerCase().includes('ipad')
+    )
+      device = 'ios';
+
+    const ip =
+      request.rawRequest?.ip ||
+      request.rawRequest?.headers['x-forwarded-for'] ||
+      'unknown';
+
+    let txLogData: any = null;
+    let validationError: string | null = null;
+
+    try {
+      await db.runTransaction(async (t) => {
+        const userDoc = await t.get(userRef);
+        const subDoc = await t.get(subscriptionRef);
+
+        if (!userDoc.exists) {
+          throw new Error('El usuario no existe.');
+        }
+        if (!subDoc.exists) {
+          throw new Error('La suscripción especificada no existe.');
+        }
+
+        const userData = userDoc.data();
+        const subData = subDoc.data();
+
+        const amount = subData?.amount || 0;
+        const currentBalance = userData?.availableBalance || 0;
+        const finalBalance = currentBalance + amount;
+
+        txLogData = {
+          fundId: subData?.fundId,
+          userId,
+          userRef,
+          fundRef: subData?.fundRef,
+          subscriptionRef,
+          fundName: subData?.fundName,
+          fundMinInvestment: subData?.fundMinInvestment,
+          previousBalance: currentBalance,
+          amount,
+          type: 'unsubscribe',
+          finalBalance,
+          status: 'completed',
+          metadata: {
+            device,
+            ip,
+            userAgent,
+          },
+          createdAt: FieldValue.serverTimestamp(),
+        };
+
+        // Mutaciones
+        t.update(userRef, { availableBalance: finalBalance });
+        t.delete(subscriptionRef);
+        t.set(transactionRef, txLogData);
+      });
+    } catch (error: any) {
+      validationError = error.message;
+    }
+
+    if (validationError) {
+      logger.error('Unsubscribe error:', validationError);
+      throw new HttpsError('internal', validationError);
+    }
+
+    return {
+      success: true,
+      message: 'Suscripción cancelada y saldo devuelto con éxito.',
+    };
+  },
+);
+
+
 export const getusersubscriptions = onCall<{ userId: string }>(async (request) => {
   const { userId } = request.data;
 
