@@ -3,4 +3,5 @@
 export * from './fund';
 export * from './fundSubscriptionData';
 export * from './subscription';
+export * from './transaction';
 export * from './user';

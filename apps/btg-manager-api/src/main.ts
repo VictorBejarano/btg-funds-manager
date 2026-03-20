@@ -3,7 +3,7 @@ import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as logger from 'firebase-functions/logger';
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
-import { Fund, FundSubscriptionData, Subscription } from '@btg-funds-manager/contracts';
+import { Fund, FundSubscriptionData, Subscription, Transaction } from '@btg-funds-manager/contracts';
 
 setGlobalOptions({ maxInstances: 10 });
 
@@ -300,4 +300,43 @@ export const getusersubscriptions = onCall<{ userId: string }>(async (request) =
     );
   }
 });
+
+export const getusertransactions = onCall<{ userId: string }>(async (request) => {
+  const { userId } = request.data;
+
+  if (!userId) {
+    throw new HttpsError(
+      'invalid-argument',
+      'El campo userId es obligatorio para obtener las transacciones.',
+    );
+  }
+
+  try {
+    const snapshot = await db
+      .collection('transactions')
+      .where('userId', '==', userId)
+      .orderBy('createdAt', 'desc')
+      .get();
+
+    return snapshot.docs.map((doc) => {
+      const data = doc.data();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { userRef, fundRef, subscriptionRef, ...rest } = data;
+      return {
+        id: doc.id,
+        ...rest,
+        createdAt: data.createdAt ? data.createdAt.toDate().toISOString() : null,
+      } as unknown as Transaction;
+    });
+
+
+  } catch (error) {
+    logger.error('Error fetching user transactions:', error);
+    throw new HttpsError(
+      'internal',
+      'No se pudo obtener el historial de transacciones.',
+    );
+  }
+});
+
 
