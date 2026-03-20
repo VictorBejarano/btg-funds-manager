@@ -62,3 +62,23 @@ class FundModificationFailure extends FundsState {
   @override
   List<Object?> get props => [error];
 }
+
+class FundSubscriptionInProgress extends FundsState {}
+
+class FundSubscriptionSuccess extends FundsState {
+  final String message;
+
+  const FundSubscriptionSuccess(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class FundSubscriptionFailure extends FundsState {
+  final String error;
+
+  const FundSubscriptionFailure(this.error);
+
+  @override
+  List<Object?> get props => [error];
+}

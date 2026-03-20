@@ -22,9 +22,14 @@
             "glob": "**/*",
             "input": "apps/firebase-app/environment",
             "output": "."
+          },
+          {
+            "glob": "package.json",
+            "input": "apps/btg-manager-api",
+            "output": "."
           }
         ],
-        "generatePackageJson": true,
+        "generatePackageJson": false,
         "platform": "node",
         "bundle": true,
         "thirdParty": true,

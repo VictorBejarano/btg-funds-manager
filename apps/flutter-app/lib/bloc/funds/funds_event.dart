@@ -27,3 +27,18 @@ class ModifyFundRequested extends FundsEvent {
   @override
   List<Object?> get props => [fund];
 }
+
+class SubscribeFundRequested extends FundsEvent {
+  final String fundId;
+  final String userId;
+  final double amount;
+
+  const SubscribeFundRequested({
+    required this.fundId,
+    required this.userId,
+    required this.amount,
+  });
+
+  @override
+  List<Object?> get props => [fundId, userId, amount];
+}

@@ -16,6 +16,7 @@ class FundsBloc extends Bloc<FundsEvent, FundsState> {
     on<LoadFundsRequested>(_onLoadFundsRequested);
     on<FundDetailRequested>(_onFundDetailRequested);
     on<ModifyFundRequested>(_onModifyFundRequested);
+    on<SubscribeFundRequested>(_onSubscribeFundRequested);
   }
 
   Future<void> _onLoadFundsRequested(
@@ -84,6 +85,32 @@ class FundsBloc extends Bloc<FundsEvent, FundsState> {
       );
     } catch (e) {
       emit(FundModificationFailure(e.toString()));
+    }
+  }
+
+  Future<void> _onSubscribeFundRequested(
+    SubscribeFundRequested event,
+    Emitter<FundsState> emit,
+  ) async {
+    emit(FundSubscriptionInProgress());
+    try {
+      final HttpsCallable callable = _functions.httpsCallable('subscribefund');
+      final result = await callable.call({
+        'userId': event.userId,
+        'fundId': event.fundId,
+        'amount': event.amount,
+      });
+
+      final String msg = result.data['message'] ?? 'Suscripción exitosa';
+      emit(FundSubscriptionSuccess(msg));
+    } on FirebaseFunctionsException catch (e) {
+      emit(
+        FundSubscriptionFailure(
+          e.message ?? 'Error desconocido de Firebase Functions',
+        ),
+      );
+    } catch (e) {
+      emit(FundSubscriptionFailure(e.toString()));
     }
   }
 }
