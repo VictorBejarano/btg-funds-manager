@@ -1,0 +1,35 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo-area">
+      <div class="icon-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+      </div>
+      <h2>BTG Manager</h2>
+      <p>Inicia sesi&oacute;n para gestionar tus fondos.</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Correo electronico</label>
+        <input type="email" id="email" formControlName="email" placeholder="admin@btg.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" formControlName="password" placeholder="••••••••" />
+      </div>
+
+      <div class="error-msg" *ngIf="authStore.error()">
+        {{ authStore.error() }}
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid || authStore.loading()">
+        <span *ngIf="!authStore.loading()">Iniciar sesi&oacute;n</span>
+        <span *ngIf="authStore.loading()" class="loader"></span>
+      </button>
+    </form>
+  </div>
+</div>

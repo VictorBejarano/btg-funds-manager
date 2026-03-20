@@ -1,0 +1,61 @@
+{
+  "database": {
+    "rules": "apps/firebase-app/database.rules.json"
+  },
+  "firestore": {
+    "rules": "apps/firebase-app/firestore.rules",
+    "indexes": "apps/firebase-app/firestore.indexes.json"
+  },
+  "hosting": {
+    "target": "btg-manager-app", 
+    "public": "dist/apps/btg-manager-app/browser",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "storage": {
+    "rules": "apps/firebase-app/storage.rules"
+  },
+  "functions": [
+    {
+      "codebase": "btg-manager-api",
+      "source": "dist/apps/btg-manager-api",
+      "runtime": "nodejs20",
+      "ignore": ["*.local"]
+    }
+  ],
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "database": {
+      "port": 9000
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "pubsub": {
+      "port": 8085
+    },
+    "storage": {
+      "port": 9199
+    },
+    "eventarc": {
+      "port": 9299
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  }
+}

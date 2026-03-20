@@ -1,0 +1,91 @@
+{
+  "name": "apps/btg-manager-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/btg-manager-api/src",
+  "projectType": "application",
+  "tags": [
+    "firebase:function",
+    "firebase:name:apps/btg-manager-api",
+    "firebase:dep:apps/firebase-app"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/btg-manager-api",
+        "main": "apps/btg-manager-api/src/main.ts",
+        "tsConfig": "apps/btg-manager-api/tsconfig.app.json",
+        "assets": [
+          "apps/btg-manager-api/src/assets",
+          {
+            "glob": "**/*",
+            "input": "apps/firebase-app/environment",
+            "output": "."
+          },
+          {
+            "glob": "package.json",
+            "input": "apps/btg-manager-api",
+            "output": "."
+          }
+        ],
+        "generatePackageJson": false,
+        "platform": "node",
+        "bundle": true,
+        "thirdParty": true,
+        "dependenciesFieldType": "dependencies",
+        "target": "node20",
+        "format": ["esm"],
+        "esbuildOptions": {
+          "logLevel": "info",
+          "external": ["firebase-functions", "firebase-admin", "fs", "path"]
+        }
+      }
+    },
+    "prune-lockfile": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "executor": "@nx/js:prune-lockfile",
+      "outputs": [
+        "{workspaceRoot}/dist/apps/btg-manager-api/package.json",
+        "{workspaceRoot}/dist/apps/btg-manager-api/package-lock.json"
+      ],
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "copy-workspace-modules": {
+      "dependsOn": ["build"],
+      "cache": true,
+      "outputs": [
+        "{workspaceRoot}/dist/apps/btg-manager-api/workspace_modules"
+      ],
+      "executor": "@nx/js:copy-workspace-modules",
+      "options": {
+        "buildTarget": "build"
+      }
+    },
+    "prune": {
+      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
+      "executor": "nx:noop"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/btg-manager-api/jest.config.cts",
+        "passWithNoTests": true
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run apps/firebase-app:deploy --only functions:btg-manager-api"
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

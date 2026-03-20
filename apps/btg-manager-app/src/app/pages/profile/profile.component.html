@@ -1,0 +1,207 @@
+<div class="page-header">
+  <div>
+    <h1>Perfil y transacciones</h1>
+    <p>Los detalles de su cuenta y su historial de transacciones.</p>
+  </div>
+  <button class="refresh-btn" (click)="userStore.reloadProfile()">
+    Actualizar 🔄
+  </button>
+</div>
+
+<div class="profile-container">
+
+  <!-- User Profile Card -->
+  <section class="profile-card">
+    <div class="card-header flex-header">
+      <h2>Detalles de la cuenta</h2>
+      <button class="edit-btn" (click)="openEditModal()" *ngIf="!userStore.loading() && userStore.user()">
+        ✏️ Editar
+      </button>
+    </div>
+
+    <div class="loading-state" *ngIf="userStore.loading()">
+      <div class="loader-sm"></div>
+    </div>
+
+    <div class="profile-details" *ngIf="!userStore.loading() && userStore.user()">
+      <div class="detail-group">
+        <div class="avatar-lg">{{ getInitials() }}</div>
+        <div class="user-meta">
+          <h3>{{ userStore.user()?.name }} {{ userStore.user()?.lastname }}</h3>
+          <p class="user-contact">{{ userStore.user()?.email }}</p>
+          <div class="user-info-grid">
+            <div class="info-item">
+              <span class="info-label">Identificación:</span>
+              <span class="info-value">{{ userStore.user()?.identificationType }} {{
+                userStore.user()?.identificationNumber }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Teléfono:</span>
+              <span class="info-value">{{ userStore.user()?.phone || 'No especificado' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Notificación:</span>
+              <span class="info-value">{{ userStore.user()?.notificationMethod === 'EMAIL' ? 'Correo Electrónico' :
+                'SMS' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="balance-display">
+        <div class="balance-label">Saldo total disponible</div>
+        <div class="balance-amount">{{ (userStore.user()?.availableBalance ?? 0) | currency:'COP':'symbol':'1.0-0' }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Transaction History -->
+  <section class="history-card">
+    <div class="card-header">
+      <h2>Historico de transacciones</h2>
+    </div>
+
+    <div class="loading-state" *ngIf="userStore.loading()">
+      <div class="loader-sm"></div>
+      <p>Cargando transacciones...</p>
+    </div>
+
+    <div class="empty-state" *ngIf="!userStore.loading() && userStore.transactions().length === 0">
+      <p>No se encontraron transacciones.</p>
+    </div>
+
+    <div class="transactions-list" *ngIf="!userStore.loading() && userStore.transactions().length > 0">
+      <div class="transaction-item" *ngFor="let tx of userStore.transactions()" (click)="openTransactionModal(tx)">
+        <div class="tx-icon" [ngClass]="tx.type === 'subscribe' ? 'icon-sub' : 'icon-unsub'">
+          {{ tx.type === 'subscribe' ? '⬇️' : '⬆️' }}
+        </div>
+
+        <div class="tx-details">
+          <h4>{{ tx.type === 'subscribe' ? 'Suscrito a' : 'Cancelado' }} {{ tx.fundName }}</h4>
+          <div class="tx-meta">
+            <span class="tx-date">{{ tx.createdAt | date:'medium' }}</span>
+            <span class="tx-status-badge" [ngClass]="'status-' + tx.status">{{ tx.status }}</span>
+          </div>
+        </div>
+
+        <div class="tx-amount" [ngClass]="tx.type === 'subscribe' ? 'amount-negative' : 'amount-positive'">
+          {{ tx.type === 'subscribe' ? '-' : '+' }} {{ tx.amount | currency:'COP':'symbol':'1.0-0' }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal-overlay" *ngIf="isEditing">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Editar Perfil</h3>
+      <button class="close-modal-btn" (click)="closeEditModal()">×</button>
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+      <div class="form-group">
+        <label for="name">Nombre</label>
+        <input type="text" id="name" formControlName="name" />
+      </div>
+
+      <div class="form-group">
+        <label for="lastname">Apellido</label>
+        <input type="text" id="lastname" formControlName="lastname" />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Teléfono</label>
+        <input type="tel" id="phone" formControlName="phone" />
+      </div>
+
+      <div class="form-group">
+        <label for="availableBalance">Saldo Disponible (Solo Pruebas)</label>
+        <div class="input-with-prefix">
+          <span class="prefix">$</span>
+          <input type="number" id="availableBalance" formControlName="availableBalance" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="notificationMethod">Preferencia de Notificación</label>
+        <select id="notificationMethod" formControlName="notificationMethod">
+          <option value="EMAIL">Correo Electrónico</option>
+          <option value="SMS">Mensaje de Texto (SMS)</option>
+        </select>
+      </div>
+
+      <div class="error-msg" *ngIf="userStore.error()">
+        {{ userStore.error() }}
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="closeEditModal()">Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="profileForm.invalid || userStore.loading()">
+          <span *ngIf="!userStore.loading()">Guardar Cambios</span>
+          <span *ngIf="userStore.loading()" class="loader-xs"></span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Transaction Detail Modal -->
+<div class="modal-overlay" *ngIf="isTransactionModalOpen">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Detalle de Transacción</h3>
+      <button class="close-modal-btn" (click)="closeTransactionModal()">×</button>
+    </div>
+
+    <div class="modal-body" *ngIf="selectedTransaction">
+      <div class="transaction-detail-header">
+        <div class="detail-icon" [ngClass]="selectedTransaction.type === 'subscribe' ? 'icon-sub' : 'icon-unsub'">
+          {{ selectedTransaction.type === 'subscribe' ? '⬇️' : '⬆️' }}
+        </div>
+        <div class="detail-title">
+          <h4>{{ selectedTransaction.type === 'subscribe' ? 'Suscripción' : 'Cancelación' }}</h4>
+          <p>{{ selectedTransaction.fundName }}</p>
+        </div>
+        <div class="detail-status" [ngClass]="'status-' + selectedTransaction.status">
+          {{ selectedTransaction.status }}
+        </div>
+      </div>
+
+      <div class="detail-info-list">
+        <div class="info-row">
+          <span class="info-label">ID del Fondo:</span>
+          <span class="info-value">{{ selectedTransaction.fundId }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Fecha:</span>
+          <span class="info-value">{{ selectedTransaction.createdAt | date:'medium' }}</span>
+        </div>
+        <div class="info-row highlight-row">
+          <span class="info-label">Monto:</span>
+          <span class="info-value"
+            [ngClass]="selectedTransaction.type === 'subscribe' ? 'amount-negative' : 'amount-positive'">
+            {{ selectedTransaction.type === 'subscribe' ? '-' : '+' }} {{ selectedTransaction.amount |
+            currency:'COP':'symbol':'1.0-0' }}
+          </span>
+        </div>
+        <div class="info-row" *ngIf="selectedTransaction.previousBalance != null">
+          <span class="info-label">Saldo Anterior:</span>
+          <span class="info-value">{{ selectedTransaction.previousBalance | currency:'COP':'symbol':'1.0-0' }}</span>
+        </div>
+        <div class="info-row" *ngIf="selectedTransaction.finalBalance != null">
+          <span class="info-label">Saldo Final:</span>
+          <span class="info-value highlight-balance">{{ selectedTransaction.finalBalance |
+            currency:'COP':'symbol':'1.0-0' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" (click)="closeTransactionModal()">Cerrar</button>
+    </div>
+  </div>
+</div>

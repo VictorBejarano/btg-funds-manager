@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Investment Fund",
+  "description": "Esquema para la validación de fondos de inversión de BTG Pactual",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "category",
+    "minInvestment",
+    "targetApy",
+    "status",
+    "createdAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Identificador único del fondo (ej: fund_001 o ID de Firestore)"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100,
+      "description": "Nombre comercial del fondo"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Acciones",
+        "Deuda",
+        "Fondo Inmobiliario",
+        "Renta Fija",
+        "Sostenible",
+        "Commodities",
+        "Multiactivo",
+        "Infraestructura"
+      ],
+      "description": "Categoría o tipo de activo del fondo"
+    },
+    "minInvestment": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Monto mínimo de inversión en COP"
+    },
+    "targetApy": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Rendimiento anual esperado en porcentaje (%)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "CLOSED"],
+      "default": "ACTIVE",
+      "description": "Estado actual de disponibilidad del fondo"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Fecha de creación del registro en formato ISO 8601"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Transaction",
+  "type": "object",
+  "properties": {
+    "amount": { "type": "integer" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "finalBalance": { "type": "integer" },
+    "fundId": { "type": "string" },
+    "fundMinInvestment": { "type": "integer" },
+    "fundName": { "type": "string" },
+    "previousBalance": { "type": "integer" },
+    "status": {
+      "$ref": "#/definitions/TransactionStatus"
+    },
+    "type": {
+      "$ref": "#/definitions/TransactionType"
+    },
+    "userId": { "type": "string" }
+  },
+  "required": [
+    "amount",
+    "createdAt",
+    "fundId",
+    "fundName",
+    "status",
+    "type",
+    "userId"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "TransactionStatus": {
+      "type": "string",
+      "enum": ["completed", "failed"]
+    },
+    "TransactionType": {
+      "type": "string",
+      "enum": ["subscribe", "unsubscribe"]
+    }
+  }
+}

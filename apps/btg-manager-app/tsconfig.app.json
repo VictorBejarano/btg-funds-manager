@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    /* 1. Soluciona el error de 'console' añadiendo soporte para el Navegador (DOM) */
+    "lib": ["es2022", "dom"],
+    /* 2. Sobrescribe las opciones de backend del tsconfig.base para permitir el bundle de Angular */
+    "emitDeclarationOnly": false,
+    "declaration": false,
+    "composite": false,
+    /* 3. Deja que Angular maneje sus propios tipos, pero puedes añadir 'node' si usas env vars */
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts",
+    "jest.config.ts",
+    "jest.config.cts",
+    "src/test-setup.ts"
+  ]
+}

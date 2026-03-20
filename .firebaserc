@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "staging": "btg-funds-manager"
+  },
+  "targets": {
+    "btg-funds-manager": {
+      "hosting": {
+        "btg-manager-app": [
+          "btg-funds-manager"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

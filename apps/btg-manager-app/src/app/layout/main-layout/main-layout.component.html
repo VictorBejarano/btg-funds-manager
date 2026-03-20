@@ -1,0 +1,60 @@
+<div class="app-layout">
+  <!-- Sidebar / Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+        <span>BTG Manager</span>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a routerLink="/funds" routerLinkActive="active" class="nav-link">
+        <span class="icon">📈</span> Fondos disponibles
+      </a>
+      <a routerLink="/subscriptions" routerLinkActive="active" class="nav-link">
+        <span class="icon">💼</span> Mis suscripciones
+      </a>
+      <a routerLink="/profile" routerLinkActive="active" class="nav-link">
+        <span class="icon">👤</span> Perfil y transacciones
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout()">
+        <span class="icon">🚪</span> Cerrar sesi&oacute;n
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-title">
+        <!-- Could show context or welcome msg here -->
+      </div>
+
+      <div class="user-balance-widget">
+        <div class="balance-info">
+          <span class="balance-label">Saldo actual</span>
+          <span class="balance-amount" *ngIf="!userStore.loading()">
+            {{ (userStore.user()?.availableBalance ?? 0) | currency:'COP':'symbol':'1.0-0' }}
+          </span>
+          <span class="balance-amount loading-text" *ngIf="userStore.loading()">Loading...</span>
+        </div>
+        <div class="avatar">
+          {{ getInitials() }}
+        </div>
+      </div>
+    </header>
+
+    <!-- Router Outlet for Pages -->
+    <div class="page-container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

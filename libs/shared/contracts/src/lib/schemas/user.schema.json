@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "UID único del usuario"
+    },
+    "name": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "identificationType": {
+      "$ref": "#/definitions/UserIdentificationType"
+    },
+    "identificationNumber": {
+      "type": "string"
+    },
+    "availableBalance": {
+      "type": "number",
+      "description": "Saldo disponible"
+    },
+    "notificationMethod": {
+      "$ref": "#/definitions/UserNotificationMethod"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "lastname",
+    "email",
+    "identificationType",
+    "identificationNumber",
+    "availableBalance"
+  ],
+  "additionalProperties": false,
+
+  "definitions": {
+    "UserIdentificationType": {
+      "type": "string",
+      "enum": ["CC", "CE", "NIT", "PP"],
+      "description": "Tipo de documento de identidad"
+    },
+    "UserNotificationMethod": {
+      "type": "string",
+      "enum": ["SMS", "EMAIL"],
+      "description": "Método preferido de notificación"
+    }
+  }
+}
