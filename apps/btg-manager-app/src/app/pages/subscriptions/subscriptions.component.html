@@ -32,30 +32,24 @@
 
 <div class="funds-grid" *ngIf="!subscriptionsStore.loading() && subscriptionsStore.subscriptions().length > 0">
   <div class="fund-card" *ngFor="let sub of subscriptionsStore.subscriptions()">
-    <div class="card-header">
-      <div class="fund-category">Activo</div>
-    </div>
-
-    <h3 class="fund-name">{{ sub.fundName }}</h3>
-
-    <div class="subscription-details">
-      <div class="detail-row">
-        <span class="detail-label">Monto invertido:</span>
-        <span class="detail-value">{{ sub.amount | currency:'COP':'symbol':'1.0-0' }}</span>
+    <div class="card-main-area" (click)="openDetailModal(sub)">
+      <div class="card-header">
+        <div class="fund-category">Activo</div>
       </div>
-      <div class="detail-row">
-        <span class="detail-label">Fecha:</span>
-        <span class="detail-value">{{ sub.createdAt | date:'medium' }}</span>
+
+      <h3 class="fund-name">{{ sub.fundName }}</h3>
+
+      <div class="subscription-details">
+        <div class="detail-row">
+          <span class="detail-label">Monto invertido:</span>
+          <span class="detail-value">{{ sub.amount | currency:'COP':'symbol':'1.0-0' }}</span>
+        </div>
       </div>
     </div>
 
     <div class="fund-actions">
-      <button 
-        class="action-btn danger-btn" 
-        [disabled]="isUnsubscribing === sub.id"
-        (click)="openCancelModal(sub.id)"
-      >
-         {{ isUnsubscribing === sub.id ? 'Procesando...' : 'Cancelar suscripcion' }}
+      <button class="action-btn danger-btn" [disabled]="isUnsubscribing === sub.id" (click)="openCancelModal(sub.id)">
+        {{ isUnsubscribing === sub.id ? 'Procesando...' : 'Cancelar suscripcion' }}
       </button>
     </div>
   </div>
@@ -68,7 +62,7 @@
       <h3>Cancelar Suscripción</h3>
       <button class="close-modal-btn" (click)="closeCancelModal()">×</button>
     </div>
-    
+
     <div class="modal-body">
       <p>¿Estás seguro de que deseas cancelar esta suscripción?</p>
       <p class="text-warning">El monto invertido será reembolsado a tu saldo disponible para futuras inversiones.</p>
@@ -77,8 +71,52 @@
     <div class="modal-actions">
       <button type="button" class="btn-cancel" (click)="closeCancelModal()">Volver</button>
       <button type="button" class="btn-danger-confirm" (click)="confirmUnsubscribe()">
-         Confirmar Cancelación
+        Confirmar Cancelación
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- Subscription Detail Modal -->
+<div class="modal-overlay" *ngIf="isDetailModalOpen">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Detalle de Suscripción</h3>
+      <button class="close-modal-btn" (click)="closeDetailModal()">×</button>
+    </div>
+
+    <div class="modal-body" *ngIf="selectedSubscription">
+      <div class="subscription-detail-header">
+        <div class="sub-avatar">📄</div>
+        <div class="sub-title">
+          <h4>{{ selectedSubscription.fundName }}</h4>
+          <span class="active-badge">ACTIVA</span>
+        </div>
+      </div>
+
+      <div class="detail-info-grid">
+        <div class="info-item">
+          <span class="info-label">Monto Invertido</span>
+          <span class="info-value highlight-amount">{{ selectedSubscription.amount | currency:'COP':'symbol':'1.0-0'
+            }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Fecha de Suscripción</span>
+          <span class="info-value">{{ selectedSubscription.createdAt | date:'medium' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Fondo de Referencia</span>
+          <span class="info-value small-text">{{ selectedSubscription.fundId }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">ID de Operación</span>
+          <span class="info-value small-text">{{ selectedSubscription.id }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" (click)="closeDetailModal()">Cerrar</button>
     </div>
   </div>
 </div>

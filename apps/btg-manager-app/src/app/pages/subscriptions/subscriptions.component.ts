@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subscription } from '@btg-funds-manager/contracts';
 import { SubscriptionsStore } from '../../state/subscriptions.store';
 import { UserStore } from '../../state/user.store';
 
@@ -19,6 +20,10 @@ export class SubscriptionsComponent implements OnInit {
   // Modal state
   isCancelModalOpen = false;
   selectedSubscriptionId: string | null = null;
+  
+  // Detail Modal state
+  selectedSubscription: Subscription | null = null;
+  isDetailModalOpen = false;
 
   ngOnInit() {
     this.subscriptionsStore.loadSubscriptions();
@@ -49,5 +54,15 @@ export class SubscriptionsComponent implements OnInit {
       // Reload user profile data to update balance
       await this.userStore.loadUserData();
     }
+  }
+
+  openDetailModal(sub: Subscription) {
+    this.selectedSubscription = sub;
+    this.isDetailModalOpen = true;
+  }
+
+  closeDetailModal() {
+    this.selectedSubscription = null;
+    this.isDetailModalOpen = false;
   }
 }
