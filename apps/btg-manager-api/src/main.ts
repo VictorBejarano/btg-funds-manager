@@ -397,9 +397,9 @@ export const updateuserdata = onCall<{ userId: string; userData: Partial<User> }
         throw new HttpsError('not-found', 'El usuario no existe.');
       }
 
-      // No permitimos actualizar el saldo directamente ni el ID por esta vía
+      // No permitimos actualizar el ID por esta vía, pero para propósitos de prueba el saldo sí se puede editar
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { availableBalance, id, ...cleanData } = userData as any;
+      const { id, ...cleanData } = userData as any;
 
       await userRef.update({
         ...cleanData,

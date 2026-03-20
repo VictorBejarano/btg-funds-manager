@@ -36,6 +36,7 @@ class _EditProfileFormState extends State<_EditProfileForm> {
   late TextEditingController _nameController;
   late TextEditingController _lastnameController;
   late TextEditingController _phoneController;
+  late TextEditingController _balanceController;
   UserNotificationMethod? _selectedMethod;
 
   @override
@@ -44,6 +45,7 @@ class _EditProfileFormState extends State<_EditProfileForm> {
     _nameController = TextEditingController(text: widget.user.name);
     _lastnameController = TextEditingController(text: widget.user.lastname);
     _phoneController = TextEditingController(text: widget.user.phone ?? '');
+    _balanceController = TextEditingController(text: widget.user.availableBalance.toInt().toString());
     _selectedMethod = widget.user.notificationMethod;
   }
 
@@ -52,6 +54,7 @@ class _EditProfileFormState extends State<_EditProfileForm> {
     _nameController.dispose();
     _lastnameController.dispose();
     _phoneController.dispose();
+    _balanceController.dispose();
     super.dispose();
   }
 
@@ -61,6 +64,7 @@ class _EditProfileFormState extends State<_EditProfileForm> {
         'name': _nameController.text.trim(),
         'lastname': _lastnameController.text.trim(),
         'phone': _phoneController.text.trim(),
+        'availableBalance': double.tryParse(_balanceController.text.trim()) ?? widget.user.availableBalance,
         if (_selectedMethod != null)
           'notificationMethod': userNotificationMethodValues.reverse[_selectedMethod],
       };
@@ -133,6 +137,19 @@ class _EditProfileFormState extends State<_EditProfileForm> {
                 prefixIcon: Icon(Icons.phone_outlined),
               ),
               keyboardType: TextInputType.phone,
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _balanceController,
+              decoration: const InputDecoration(
+                labelText: 'Saldo Disponible (Solo Pruebas)',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.account_balance_wallet_outlined),
+                prefixText: '\$ ',
+              ),
+              keyboardType: TextInputType.number,
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Requerido' : null,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<UserNotificationMethod>(
