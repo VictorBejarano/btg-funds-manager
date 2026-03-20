@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserNotificationMethod } from '@btg-funds-manager/contracts';
+import { UserNotificationMethod, Transaction } from '@btg-funds-manager/contracts';
 import { UserStore } from '../../state/user.store';
 
 @Component({
@@ -17,6 +17,10 @@ export class ProfileComponent implements OnInit {
 
   isEditing = false;
   profileForm: FormGroup;
+
+  // Transaction detail modal state
+  selectedTransaction: Transaction | null = null;
+  isTransactionModalOpen = false;
 
   constructor() {
     this.profileForm = this.fb.group({
@@ -65,5 +69,15 @@ export class ProfileComponent implements OnInit {
         this.closeEditModal();
       }
     }
+  }
+
+  openTransactionModal(tx: Transaction) {
+    this.selectedTransaction = tx;
+    this.isTransactionModalOpen = true;
+  }
+
+  closeTransactionModal() {
+    this.selectedTransaction = null;
+    this.isTransactionModalOpen = false;
   }
 }

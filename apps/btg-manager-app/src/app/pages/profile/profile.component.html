@@ -70,7 +70,7 @@
     </div>
 
     <div class="transactions-list" *ngIf="!userStore.loading() && userStore.transactions().length > 0">
-      <div class="transaction-item" *ngFor="let tx of userStore.transactions()">
+      <div class="transaction-item" *ngFor="let tx of userStore.transactions()" (click)="openTransactionModal(tx)">
         <div class="tx-icon" [ngClass]="tx.type === 'subscribe' ? 'icon-sub' : 'icon-unsub'">
           {{ tx.type === 'subscribe' ? '⬇️' : '⬆️' }}
         </div>
@@ -141,5 +141,59 @@
         </button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Transaction Detail Modal -->
+<div class="modal-overlay" *ngIf="isTransactionModalOpen">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Detalle de Transacción</h3>
+      <button class="close-modal-btn" (click)="closeTransactionModal()">×</button>
+    </div>
+    
+    <div class="modal-body" *ngIf="selectedTransaction">
+       <div class="transaction-detail-header">
+          <div class="detail-icon" [ngClass]="selectedTransaction.type === 'subscribe' ? 'icon-sub' : 'icon-unsub'">
+             {{ selectedTransaction.type === 'subscribe' ? '⬇️' : '⬆️' }}
+          </div>
+          <div class="detail-title">
+             <h4>{{ selectedTransaction.type === 'subscribe' ? 'Suscripción' : 'Cancelación' }}</h4>
+             <p>{{ selectedTransaction.fundName }}</p>
+          </div>
+          <div class="detail-status" [ngClass]="'status-' + selectedTransaction.status">
+             {{ selectedTransaction.status }}
+          </div>
+       </div>
+
+       <div class="detail-info-list">
+          <div class="info-row">
+             <span class="info-label">ID del Fondo:</span>
+             <span class="info-value">{{ selectedTransaction.fundId }}</span>
+          </div>
+          <div class="info-row">
+             <span class="info-label">Fecha:</span>
+             <span class="info-value">{{ selectedTransaction.createdAt | date:'medium' }}</span>
+          </div>
+          <div class="info-row highlight-row">
+             <span class="info-label">Monto:</span>
+             <span class="info-value" [ngClass]="selectedTransaction.type === 'subscribe' ? 'amount-negative' : 'amount-positive'">
+                {{ selectedTransaction.type === 'subscribe' ? '-' : '+' }} {{ selectedTransaction.amount | currency:'COP':'symbol':'1.0-0' }}
+             </span>
+          </div>
+          <div class="info-row" *ngIf="selectedTransaction.previousBalance != null">
+             <span class="info-label">Saldo Anterior:</span>
+             <span class="info-value">{{ selectedTransaction.previousBalance | currency:'COP':'symbol':'1.0-0' }}</span>
+          </div>
+          <div class="info-row" *ngIf="selectedTransaction.finalBalance != null">
+             <span class="info-label">Saldo Final:</span>
+             <span class="info-value highlight-balance">{{ selectedTransaction.finalBalance | currency:'COP':'symbol':'1.0-0' }}</span>
+          </div>
+       </div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" (click)="closeTransactionModal()">Cerrar</button>
+    </div>
   </div>
 </div>

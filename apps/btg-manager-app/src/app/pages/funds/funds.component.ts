@@ -24,6 +24,7 @@ export class FundsComponent implements OnInit {
 
   ngOnInit() {
     this.fundsStore.loadFunds();
+    this.userStore.reloadProfile();
   }
 
   isValidAmount(fund: Fund): boolean {
