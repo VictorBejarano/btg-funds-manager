@@ -11,7 +11,7 @@
 ## Descripción de la aplicación
 
 Descripción de la aplicación
-Esta aplicación está diseñada para la gestión de fondos de inversión. Compatible con Android y Angular, la aplicación ofrece una experiencia intuitiva y fácil de usar. Simplemente inicia sesión y podrás suscribirse a un fondo, ver el detalle de este además de un histórico de transacciones.
+Esta aplicación está diseñada para la gestión de fondos de inversión. Compatible con Android y Angular, la aplicación ofrece una experiencia intuitiva y fácil de usar. Simplemente inicia sesión y podrás suscribirse a un fondo, ver el detalle de este además de un histórico de transacciones. Para ver la pagina del proyecto desplegada ir a [https://btg-funds-manager.web.app/](https://btg-funds-manager.web.app/)
 
 ## Herramientas utilizadas
 
