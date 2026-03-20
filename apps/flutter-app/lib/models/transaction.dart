@@ -15,7 +15,6 @@ class Transaction {
     String fundId;
     int? fundMinInvestment;
     String fundName;
-    Metadata metadata;
     int? previousBalance;
     TransactionStatus status;
     TransactionType type;
@@ -28,7 +27,6 @@ class Transaction {
         required this.fundId,
         this.fundMinInvestment,
         required this.fundName,
-        required this.metadata,
         this.previousBalance,
         required this.status,
         required this.type,
@@ -42,7 +40,6 @@ class Transaction {
         fundId: json["fundId"],
         fundMinInvestment: json["fundMinInvestment"],
         fundName: json["fundName"],
-        metadata: Metadata.fromJson(json["metadata"]),
         previousBalance: json["previousBalance"],
         status: transactionStatusValues.map[json["status"]]!,
         type: transactionTypeValues.map[json["type"]]!,
@@ -56,35 +53,10 @@ class Transaction {
         "fundId": fundId,
         "fundMinInvestment": fundMinInvestment,
         "fundName": fundName,
-        "metadata": metadata.toJson(),
         "previousBalance": previousBalance,
         "status": transactionStatusValues.reverse[status],
         "type": transactionTypeValues.reverse[type],
         "userId": userId,
-    };
-}
-
-class Metadata {
-    String device;
-    String ip;
-    String userAgent;
-
-    Metadata({
-        required this.device,
-        required this.ip,
-        required this.userAgent,
-    });
-
-    factory Metadata.fromJson(Map<String, dynamic> json) => Metadata(
-        device: json["device"],
-        ip: json["ip"],
-        userAgent: json["userAgent"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "device": device,
-        "ip": ip,
-        "userAgent": userAgent,
     };
 }
 

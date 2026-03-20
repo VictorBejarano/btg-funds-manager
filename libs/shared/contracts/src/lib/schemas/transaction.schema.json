@@ -9,16 +9,6 @@
     "fundId": { "type": "string" },
     "fundMinInvestment": { "type": "integer" },
     "fundName": { "type": "string" },
-    "metadata": {
-      "type": "object",
-      "properties": {
-        "device": { "type": "string" },
-        "ip": { "type": "string" },
-        "userAgent": { "type": "string" }
-      },
-      "required": ["device", "ip", "userAgent"],
-      "additionalProperties": false
-    },
     "previousBalance": { "type": "integer" },
     "status": {
       "$ref": "#/definitions/TransactionStatus"
@@ -33,13 +23,11 @@
     "createdAt",
     "fundId",
     "fundName",
-    "metadata",
     "status",
     "type",
     "userId"
   ],
   "additionalProperties": false,
-
   "definitions": {
     "TransactionStatus": {
       "type": "string",
