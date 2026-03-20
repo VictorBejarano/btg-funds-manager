@@ -1,0 +1,59 @@
+<div class="page-header">
+  <div>
+    <h1>Available Funds</h1>
+    <p>Discover and subscribe to top-performing funds tailored for you.</p>
+  </div>
+  <button class="refresh-btn" (click)="fundsStore.loadFunds()">
+    Refresh 🔄
+  </button>
+</div>
+
+<!-- Alert Messages -->
+<div class="alert alert-error" *ngIf="fundsStore.error()">
+  <strong>Error:</strong> {{ fundsStore.error() }}
+  <button class="close-btn" (click)="fundsStore.loadFunds()">×</button>
+</div>
+
+<div class="alert alert-success" *ngIf="fundsStore.subscriptionMessage()">
+  {{ fundsStore.subscriptionMessage() }}
+  <button class="close-btn" (click)="fundsStore.clearSubscriptionMessage()">×</button>
+</div>
+
+<div class="loading-state" *ngIf="fundsStore.loading()">
+  <div class="loader-lg"></div>
+  <p>Loading available funds...</p>
+</div>
+
+<div class="empty-state" *ngIf="!fundsStore.loading() && fundsStore.funds().length === 0">
+  <div class="empty-icon">📂</div>
+  <h3>No funds available</h3>
+  <p>You may be subscribed to all available funds already, or none are currently offered.</p>
+</div>
+
+<div class="funds-grid" *ngIf="!fundsStore.loading() && fundsStore.funds().length > 0">
+  <div class="fund-card" *ngFor="let fund of fundsStore.funds()">
+    <div class="card-header">
+      <div class="fund-category">{{ fund.category }}</div>
+      <div class="min-amount">Min: {{ fund.minInvestment | currency:'COP':'symbol':'1.0-0' }}</div>
+    </div>
+    
+    <h3 class="fund-name">{{ fund.name }}</h3>
+    
+    <div class="fund-actions">
+      <input 
+        type="number" 
+        [(ngModel)]="subscriptionAmounts[fund.id]" 
+        placeholder="Amount to invest" 
+        class="amount-input"
+        [min]="fund.minInvestment"
+      />
+      <button 
+        class="action-btn" 
+        [disabled]="isSubscribing || !isValidAmount(fund)"
+        (click)="subscribe(fund)"
+      >
+         {{ isSubscribing ? 'Processing...' : 'Subscribe' }}
+      </button>
+    </div>
+  </div>
+</div>

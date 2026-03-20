@@ -1,0 +1,62 @@
+<div class="page-header">
+  <div>
+    <h1>My Subscriptions</h1>
+    <p>Manage your active fund investments.</p>
+  </div>
+  <button class="refresh-btn" (click)="subscriptionsStore.loadSubscriptions()">
+    Refresh 🔄
+  </button>
+</div>
+
+<!-- Alert Messages -->
+<div class="alert alert-error" *ngIf="subscriptionsStore.error()">
+  <strong>Error:</strong> {{ subscriptionsStore.error() }}
+  <button class="close-btn" (click)="subscriptionsStore.loadSubscriptions()">×</button>
+</div>
+
+<div class="alert alert-success" *ngIf="subscriptionsStore.unsubscriptionMessage()">
+  {{ subscriptionsStore.unsubscriptionMessage() }}
+  <button class="close-btn" (click)="subscriptionsStore.clearUnsubscriptionMessage()">×</button>
+</div>
+
+<div class="loading-state" *ngIf="subscriptionsStore.loading()">
+  <div class="loader-lg"></div>
+  <p>Loading your subscriptions...</p>
+</div>
+
+<div class="empty-state" *ngIf="!subscriptionsStore.loading() && subscriptionsStore.subscriptions().length === 0">
+  <div class="empty-icon">📂</div>
+  <h3>No Active Subscriptions</h3>
+  <p>You haven't subscribed to any funds yet. Head over to Available Funds to start investing.</p>
+</div>
+
+<div class="funds-grid" *ngIf="!subscriptionsStore.loading() && subscriptionsStore.subscriptions().length > 0">
+  <div class="fund-card" *ngFor="let sub of subscriptionsStore.subscriptions()">
+    <div class="card-header">
+      <div class="fund-category">Active</div>
+    </div>
+    
+    <h3 class="fund-name">{{ sub.fundName }}</h3>
+    
+    <div class="subscription-details">
+      <div class="detail-row">
+        <span class="detail-label">Invested Amount:</span>
+        <span class="detail-value">{{ sub.amount | currency:'COP':'symbol':'1.0-0' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Date:</span>
+        <span class="detail-value">{{ sub.createdAt | date:'medium' }}</span>
+      </div>
+    </div>
+
+    <div class="fund-actions">
+      <button 
+        class="action-btn danger-btn" 
+        [disabled]="isUnsubscribing === sub.id"
+        (click)="unsubscribe(sub.id)"
+      >
+         {{ isUnsubscribing === sub.id ? 'Processing...' : 'Cancel Subscription' }}
+      </button>
+    </div>
+  </div>
+</div>
