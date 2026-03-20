@@ -10,54 +10,82 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
     
-    ///ISO String de la fecha de creación
-    DateTime? createdAt;
-    String? displayName;
+    ///Saldo disponible
+    double availableBalance;
     String email;
     
-    ///El UID proveniente de Firebase Auth
+    ///UID único del usuario
     String id;
-    String? photoUrl;
-    Role role;
+    String identificationNumber;
+    UserIdentificationType identificationType;
+    String lastname;
+    String name;
+    UserNotificationMethod? notificationMethod;
+    String? phone;
 
     User({
-        this.createdAt,
-        this.displayName,
+        required this.availableBalance,
         required this.email,
         required this.id,
-        this.photoUrl,
-        required this.role,
+        required this.identificationNumber,
+        required this.identificationType,
+        required this.lastname,
+        required this.name,
+        this.notificationMethod,
+        this.phone,
     });
 
     factory User.fromJson(Map<String, dynamic> json) => User(
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        displayName: json["displayName"],
+        availableBalance: json["availableBalance"]?.toDouble(),
         email: json["email"],
         id: json["id"],
-        photoUrl: json["photoURL"],
-        role: roleValues.map[json["role"]]!,
+        identificationNumber: json["identificationNumber"],
+        identificationType: userIdentificationTypeValues.map[json["identificationType"]]!,
+        lastname: json["lastname"],
+        name: json["name"],
+        notificationMethod: userNotificationMethodValues.map[json["notificationMethod"]]!,
+        phone: json["phone"],
     );
 
     Map<String, dynamic> toJson() => {
-        "createdAt": createdAt?.toIso8601String(),
-        "displayName": displayName,
+        "availableBalance": availableBalance,
         "email": email,
         "id": id,
-        "photoURL": photoUrl,
-        "role": roleValues.reverse[role],
+        "identificationNumber": identificationNumber,
+        "identificationType": userIdentificationTypeValues.reverse[identificationType],
+        "lastname": lastname,
+        "name": name,
+        "notificationMethod": userNotificationMethodValues.reverse[notificationMethod],
+        "phone": phone,
     };
 }
 
-enum Role {
-    ADMIN,
-    GUEST,
-    USER
+
+///Tipo de documento de identidad
+enum UserIdentificationType {
+    CC,
+    CE,
+    NIT,
+    PP
 }
 
-final roleValues = EnumValues({
-    "ADMIN": Role.ADMIN,
-    "GUEST": Role.GUEST,
-    "USER": Role.USER
+final userIdentificationTypeValues = EnumValues({
+    "CC": UserIdentificationType.CC,
+    "CE": UserIdentificationType.CE,
+    "NIT": UserIdentificationType.NIT,
+    "PP": UserIdentificationType.PP
+});
+
+
+///Método preferido de notificación
+enum UserNotificationMethod {
+    EMAIL,
+    SMS
+}
+
+final userNotificationMethodValues = EnumValues({
+    "EMAIL": UserNotificationMethod.EMAIL,
+    "SMS": UserNotificationMethod.SMS
 });
 
 class EnumValues<T> {

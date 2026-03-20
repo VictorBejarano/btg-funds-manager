@@ -32,6 +32,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => HistoryBloc(functions: FirebaseFunctions.instance),
         ),
+        BlocProvider(
+          create: (context) => UserBloc(functions: FirebaseFunctions.instance),
+        ),
       ],
       child: MaterialApp(
         initialRoute: AuthWrapper.route,

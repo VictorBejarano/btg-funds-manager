@@ -5,28 +5,56 @@
   "properties": {
     "id": {
       "type": "string",
-      "description": "El UID proveniente de Firebase Auth"
+      "description": "UID único del usuario"
+    },
+    "name": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
     },
     "email": {
       "type": "string",
       "format": "email"
     },
-    "displayName": {
+    "phone": {
       "type": "string"
     },
-    "photoURL": {
-      "type": ["string", "null"]
+    "identificationType": {
+      "$ref": "#/definitions/UserIdentificationType"
     },
-    "role": {
-      "type": "string",
-      "enum": ["ADMIN", "USER", "GUEST"],
-      "default": "USER"
+    "identificationNumber": {
+      "type": "string"
     },
-    "createdAt": {
-      "type": "string",
-      "format": "date-time",
-      "description": "ISO String de la fecha de creación"
+    "availableBalance": {
+      "type": "number",
+      "description": "Saldo disponible"
+    },
+    "notificationMethod": {
+      "$ref": "#/definitions/UserNotificationMethod"
     }
   },
-  "required": ["id", "email", "role"]
+  "required": [
+    "id",
+    "name",
+    "lastname",
+    "email",
+    "identificationType",
+    "identificationNumber",
+    "availableBalance"
+  ],
+  "additionalProperties": false,
+
+  "definitions": {
+    "UserIdentificationType": {
+      "type": "string",
+      "enum": ["CC", "CE", "NIT", "PP"],
+      "description": "Tipo de documento de identidad"
+    },
+    "UserNotificationMethod": {
+      "type": "string",
+      "enum": ["SMS", "EMAIL"],
+      "description": "Método preferido de notificación"
+    }
+  }
 }

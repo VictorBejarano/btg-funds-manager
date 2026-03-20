@@ -3,7 +3,7 @@ import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as logger from 'firebase-functions/logger';
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
-import { Fund, FundSubscriptionData, Subscription, Transaction } from '@btg-funds-manager/contracts';
+import { Fund, FundSubscriptionData, Subscription, Transaction, User } from '@btg-funds-manager/contracts';
 
 setGlobalOptions({ maxInstances: 10 });
 
@@ -357,5 +357,63 @@ export const getusertransactions = onCall<{ userId: string }>(async (request) =>
     );
   }
 });
+
+export const getuserdata = onCall<{ userId: string }>(async (request) => {
+  const { userId } = request.data;
+  if (!userId) {
+    throw new HttpsError('invalid-argument', 'El ID del usuario es requerido.');
+  }
+
+  try {
+    const userDoc = await db.collection('users').doc(userId).get();
+    if (!userDoc.exists) {
+      throw new HttpsError('not-found', 'El usuario no existe.');
+    }
+
+    const data = userDoc.data();
+    return {
+      id: userDoc.id,
+      ...data,
+    } as unknown as User;
+  } catch (error) {
+    if (error instanceof HttpsError) throw error;
+    logger.error('Error al obtener usuario:', error);
+    throw new HttpsError('internal', 'Error al obtener los datos del usuario.');
+  }
+});
+
+export const updateuserdata = onCall<{ userId: string; userData: Partial<User> }>(
+  async (request) => {
+    const { userId, userData } = request.data;
+    if (!userId || !userData) {
+      throw new HttpsError('invalid-argument', 'El ID y los datos son requeridos.');
+    }
+
+    try {
+      const userRef = db.collection('users').doc(userId);
+      const userDoc = await userRef.get();
+
+      if (!userDoc.exists) {
+        throw new HttpsError('not-found', 'El usuario no existe.');
+      }
+
+      // No permitimos actualizar el saldo directamente ni el ID por esta vía
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { availableBalance, id, ...cleanData } = userData as any;
+
+      await userRef.update({
+        ...cleanData,
+        updatedAt: FieldValue.serverTimestamp(),
+      });
+
+      return { success: true, message: 'Usuario actualizado correctamente.' };
+    } catch (error) {
+      if (error instanceof HttpsError) throw error;
+      logger.error('Error al actualizar usuario:', error);
+      throw new HttpsError('internal', 'Error al actualizar los datos del usuario.');
+    }
+  }
+);
+
 
 

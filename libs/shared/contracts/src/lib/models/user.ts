@@ -1,21 +1,35 @@
 export interface User {
     /**
-     * ISO String de la fecha de creación
+     * Saldo disponible
      */
-    createdAt?:   Date;
-    displayName?: string;
-    email:        string;
+    availableBalance: number;
+    email:            string;
     /**
-     * El UID proveniente de Firebase Auth
+     * UID único del usuario
      */
-    id:        string;
-    photoURL?: null | string;
-    role:      Role;
-    [property: string]: any;
+    id:                   string;
+    identificationNumber: string;
+    identificationType:   UserIdentificationType;
+    lastname:             string;
+    name:                 string;
+    notificationMethod?:  UserNotificationMethod;
+    phone?:               string;
 }
 
-export enum Role {
-    Admin = "ADMIN",
-    Guest = "GUEST",
-    User = "USER",
+/**
+ * Tipo de documento de identidad
+ */
+export enum UserIdentificationType {
+    Cc = "CC",
+    Ce = "CE",
+    Nit = "NIT",
+    Pp = "PP",
+}
+
+/**
+ * Método preferido de notificación
+ */
+export enum UserNotificationMethod {
+    Email = "EMAIL",
+    SMS = "SMS",
 }

@@ -40,6 +40,8 @@ class _FundsViewState extends State<FundsView> {
               backgroundColor: Colors.green,
             ),
           );
+          // Recarga la lista de fondos después de una suscripción exitosa
+          _loadFunds();
         } else if (state is FundSubscriptionFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.error), backgroundColor: Colors.red),
