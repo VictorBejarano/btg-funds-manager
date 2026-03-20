@@ -10,14 +10,17 @@ setGlobalOptions({ maxInstances: 10 });
 initializeApp();
 const db = getFirestore();
 
-export const getfunds = onCall(async (request) => {
+export const getfunds = onCall<{ userId?: string }>(async (request) => {
   try {
+    const { userId } = request.data || {};
+
     const snapshot = await db
       .collection('funds')
       .where('status', '==', 'ACTIVE')
       .orderBy('createdAt', 'desc')
       .get();
-    const fundsList = snapshot.docs.map((doc) => {
+      
+    let fundsList = snapshot.docs.map((doc) => {
       const data = doc.data();
       return {
         id: doc.id,
@@ -27,6 +30,21 @@ export const getfunds = onCall(async (request) => {
           : null,
       } as Fund;
     });
+
+    if (userId) {
+      const subsSnapshot = await db
+        .collection('users')
+        .doc(userId)
+        .collection('subscriptions')
+        .get();
+
+      const subscribedFundIds = subsSnapshot.docs.map(doc => doc.data().fundId);
+
+      if (subscribedFundIds.length > 0) {
+        fundsList = fundsList.filter(fund => !subscribedFundIds.includes(fund.id));
+      }
+    }
+
     return fundsList;
   } catch (error) {
     logger.error('Error fetching funds:', error);
@@ -36,6 +54,7 @@ export const getfunds = onCall(async (request) => {
     );
   }
 });
+
 
 export const subscribefund = onCall<FundSubscriptionData>(async (request) => {
   const data = request.data;

@@ -26,7 +26,13 @@ class FundsBloc extends Bloc<FundsEvent, FundsState> {
     emit(FundsLoadInProgress());
     try {
       final HttpsCallable callable = _functions.httpsCallable('getfunds');
-      final result = await callable.call();
+      
+      final Map<String, dynamic> params = {};
+      if (event.userId != null) {
+        params['userId'] = event.userId;
+      }
+      
+      final result = await callable.call(params);
 
       final List<dynamic> data = result.data as List<dynamic>;
       final funds = data.map((json) {

@@ -9,7 +9,14 @@ abstract class FundsEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadFundsRequested extends FundsEvent {}
+class LoadFundsRequested extends FundsEvent {
+  final String? userId;
+
+  const LoadFundsRequested({this.userId});
+
+  @override
+  List<Object?> get props => [userId];
+}
 
 class FundDetailRequested extends FundsEvent {
   final String fundId;

@@ -17,7 +17,16 @@ class _FundsViewState extends State<FundsView> {
   void initState() {
     super.initState();
     // Solicita cargar la lista de fondos tan pronto inicia la vista
-    context.read<FundsBloc>().add(LoadFundsRequested());
+    _loadFunds();
+  }
+
+  void _loadFunds() {
+    final loginState = context.read<LoginBloc>().state;
+    if (loginState is LoginSuccess) {
+      context.read<FundsBloc>().add(LoadFundsRequested(userId: loginState.user.uid));
+    } else {
+      context.read<FundsBloc>().add(const LoadFundsRequested());
+    }
   }
 
   @override
@@ -67,7 +76,7 @@ class _FundsViewState extends State<FundsView> {
 
             return RefreshIndicator(
               onRefresh: () async {
-                context.read<FundsBloc>().add(LoadFundsRequested());
+                _loadFunds();
               },
               child: ListView.builder(
                 padding: const EdgeInsets.all(16.0),
