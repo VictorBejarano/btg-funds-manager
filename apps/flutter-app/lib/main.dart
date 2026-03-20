@@ -26,6 +26,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => FundsBloc(functions: FirebaseFunctions.instance),
         ),
+        BlocProvider(
+          create: (context) => SubscriptionsBloc(functions: FirebaseFunctions.instance),
+        ),
       ],
       child: MaterialApp(
         initialRoute: AuthWrapper.route,
