@@ -6,8 +6,6 @@
     "moduleResolution": "NodeNext",
     "types": ["node"],
     "target": "es2022",
-    "baseUrl": ".",
-    "rootDir": "src",
     "declaration": false,
     "declarationMap": false,
     "emitDeclarationOnly": false,

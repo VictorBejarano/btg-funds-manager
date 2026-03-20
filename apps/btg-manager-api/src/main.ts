@@ -3,6 +3,7 @@ import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import * as logger from 'firebase-functions/logger';
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { Fund } from '@btg-funds-manager/contracts';
 
 setGlobalOptions({ maxInstances: 10 });
 
@@ -21,13 +22,18 @@ export const getfunds = onCall(async (request) => {
       return {
         id: doc.id,
         ...data,
-        createdAt: data.createdAt ? data.createdAt.toDate().toISOString() : null,
-      };
+        createdAt: data.createdAt
+          ? data.createdAt.toDate().toISOString()
+          : null,
+      } as Fund;
     });
     return fundsList;
   } catch (error) {
     logger.error('Error fetching funds:', error);
-    throw new HttpsError('internal', 'No se pudo obtener el listado de fondos.');
+    throw new HttpsError(
+      'internal',
+      'No se pudo obtener el listado de fondos.',
+    );
   }
 });
 
@@ -38,7 +44,10 @@ export const subscribefund = onCall(async (request) => {
   const amount = Number(data.amount);
 
   if (!userId || !fundId || isNaN(amount)) {
-    throw new HttpsError('invalid-argument', 'Los campos userId, fundId y amount son obligatorios.');
+    throw new HttpsError(
+      'invalid-argument',
+      'Los campos userId, fundId y amount son obligatorios.',
+    );
   }
 
   const userRef = db.collection('users').doc(userId);
@@ -50,9 +59,16 @@ export const subscribefund = onCall(async (request) => {
   const userAgent = (request.rawRequest?.headers['user-agent'] as string) || '';
   let device = 'web';
   if (userAgent.toLowerCase().includes('android')) device = 'android';
-  else if (userAgent.toLowerCase().includes('iphone') || userAgent.toLowerCase().includes('ipad')) device = 'ios';
-  
-  const ip = request.rawRequest?.ip || request.rawRequest?.headers['x-forwarded-for'] || 'unknown';
+  else if (
+    userAgent.toLowerCase().includes('iphone') ||
+    userAgent.toLowerCase().includes('ipad')
+  )
+    device = 'ios';
+
+  const ip =
+    request.rawRequest?.ip ||
+    request.rawRequest?.headers['x-forwarded-for'] ||
+    'unknown';
 
   let txLogData: any = null;
   let validationError: string | null = null;
@@ -61,8 +77,6 @@ export const subscribefund = onCall(async (request) => {
     await db.runTransaction(async (t) => {
       const userDoc = await t.get(userRef);
       const fundDoc = await t.get(fundRef);
-
-      
 
       if (!userDoc.exists) {
         throw new Error('El usuario no existe.');
@@ -106,7 +120,9 @@ export const subscribefund = onCall(async (request) => {
       }
 
       if (availableBalance < amount) {
-        throw new Error('No tienes suficiente saldo (availableBalance) para esta suscripción.');
+        throw new Error(
+          'No tienes suficiente saldo (availableBalance) para esta suscripción.',
+        );
       }
 
       // Proceso Exitoso

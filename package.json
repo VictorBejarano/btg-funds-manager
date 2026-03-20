@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "generate-models": "nx run contracts:generate",
     "deploy-api": "nx reset && rm -rf dist/apps/btg-manager-api && nx deploy btg-manager-api",
     "build-api": "nx reset && rm -rf dist/apps/btg-manager-api && nx build btg-manager-api",
     "emulate-api": "rm -rf dist/apps/btg-manager-api && nx build btg-manager-api && firebase emulators:start --only functions --project btg-funds-manager"

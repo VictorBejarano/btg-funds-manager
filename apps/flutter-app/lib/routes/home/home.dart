@@ -4,6 +4,7 @@ import '../../bloc/bloc.dart';
 import '../login/login.dart';
 
 import 'views/funds_view.dart';
+import 'views/subscriptions_view.dart';
 import 'views/history_view.dart';
 import 'views/profile_view.dart';
 
@@ -21,12 +22,14 @@ class _HomePageState extends State<HomePage> {
 
   final List<String> _titles = [
     'Fondos',
+    'Suscripciones',
     'Histórico',
     'Perfil',
   ];
 
   final List<Widget> _pages = const [
     FundsView(),
+    SubscriptionsView(),
     HistoryView(),
     ProfileView(),
   ];
@@ -66,10 +69,15 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: _onItemTapped,
+          type: BottomNavigationBarType.fixed,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.pie_chart),
               label: 'Fondos',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.inventory_2),
+              label: 'Suscripciones',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
@@ -84,4 +92,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
+}
