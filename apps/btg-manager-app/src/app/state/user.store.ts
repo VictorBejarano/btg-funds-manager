@@ -58,6 +58,19 @@ export const UserStore = signalStore(
       // Convenience method to reload both
       async reloadProfile() {
         await Promise.all([this.loadUserData(), this.loadTransactions()]);
+      },
+
+      async updateUserData(userData: Partial<User>) {
+        const userId = authStore.uid();
+        if (!userId) return;
+
+        patchState(store, { loading: true, error: null });
+        try {
+          await userService.updateUserData(userId, userData);
+          await this.loadUserData(); // Reload context immediately
+        } catch (err: any) {
+          patchState(store, { loading: false, error: err.message });
+        }
       }
     })
   )

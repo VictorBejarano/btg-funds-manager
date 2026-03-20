@@ -12,8 +12,11 @@
 
   <!-- User Profile Card -->
   <section class="profile-card">
-    <div class="card-header">
+    <div class="card-header flex-header">
       <h2>Detalles de la cuenta</h2>
+      <button class="edit-btn" (click)="openEditModal()" *ngIf="!userStore.loading() && userStore.user()">
+        ✏️ Editar
+      </button>
     </div>
 
     <div class="loading-state" *ngIf="userStore.loading()">
@@ -24,7 +27,18 @@
       <div class="detail-group">
         <div class="avatar-lg">{{ getInitials() }}</div>
         <div class="user-meta">
-          <h3>{{ userStore.user()?.name }}</h3>
+          <h3>{{ userStore.user()?.name }} {{ userStore.user()?.lastname }}</h3>
+          <p class="user-contact">{{ userStore.user()?.email }}</p>
+          <div class="user-info-grid">
+            <div class="info-item">
+              <span class="info-label">Identificación:</span>
+              <span class="info-value">{{ userStore.user()?.identificationType }} {{ userStore.user()?.identificationNumber }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Teléfono:</span>
+              <span class="info-value">{{ userStore.user()?.phone || 'No especificado' }}</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -69,4 +83,43 @@
     </div>
   </section>
 
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal-overlay" *ngIf="isEditing">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Editar Perfil</h3>
+      <button class="close-modal-btn" (click)="closeEditModal()">×</button>
+    </div>
+    
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+      <div class="form-group">
+        <label for="name">Nombre</label>
+        <input type="text" id="name" formControlName="name" />
+      </div>
+
+      <div class="form-group">
+        <label for="lastname">Apellido</label>
+        <input type="text" id="lastname" formControlName="lastname" />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Teléfono</label>
+        <input type="tel" id="phone" formControlName="phone" />
+      </div>
+
+      <div class="error-msg" *ngIf="userStore.error()">
+        {{ userStore.error() }}
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="closeEditModal()">Cancelar</button>
+        <button type="submit" class="btn-save" [disabled]="profileForm.invalid || userStore.loading()">
+           <span *ngIf="!userStore.loading()">Guardar Cambios</span>
+           <span *ngIf="userStore.loading()" class="loader-xs"></span>
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
