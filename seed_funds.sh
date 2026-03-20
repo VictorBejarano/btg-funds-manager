@@ -2,11 +2,11 @@
 
 PROJECT_ID="btg-funds-manager"
 COLLECTION="funds"
-TOKEN="ya29.a0ATkoCc6hIW0kw864dpxCXwG6jHlFKAftki5kTziDisu2nKWahNx1vReyVXWglpIs8_9waCfegDDyovn9Oo_xWZHIFgsxahlIwpz_DNsCC46QbCs3kmqkkCE3qUS4aIWm603rgx1P9Yxx97-uE5BEYfXhN7-KpNlZCmp2TJ046HQlAwsjRmcuvAXwpuYnMPAw2CVRaqwaCgYKATQSARASFQHGX2MiT6GzDjOu2qss8F4cXrC1rA0206" # <--- PEGA AQUÍ TU ACCESS TOKEN ACTUALIZADO
+TOKEN="INGRESE TOKEN DE OAuth 2.0 Playground"
 
 echo "🚀 Iniciando carga con IDs auto-asignados por Firestore..."
 
-# Definición de fondos (Sin el ID manual)
+# Definición de fondos
 names=(
   "Fondo Acciones Global" "Renta Fija Colombia" "Dinamismo Inmobiliario"
   "BTG Pactual Liquidez" "Acciones Petróleo & Gas" "Fondo Deuda Privada"
@@ -82,7 +82,6 @@ for i in ${!names[@]}; do
       }
     }"
 
-    # CAMBIO CLAVE: Usamos POST y la URL termina en la colección, sin ID.
     RESPONSE=$(curl -s -X POST \
         -H "Authorization: Bearer $TOKEN" \
         -H "Content-Type: application/json" \
@@ -92,7 +91,6 @@ for i in ${!names[@]}; do
     if [[ $RESPONSE == *"error"* ]]; then
         echo "❌ Error al insertar $NAME: $RESPONSE"
     else
-        # Extraemos el nombre del documento generado para confirmar
         NEW_ID=$(echo $RESPONSE | sed -e 's/.*"name": "\(.*\)".*/\1/' | awk -F'/' '{print $NF}')
         echo "✅ Insertado con ID: $NEW_ID"
     fi
