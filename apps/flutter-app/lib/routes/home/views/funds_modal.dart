@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../bloc/bloc.dart';
 import '../../../models/fund.dart';
@@ -63,7 +62,14 @@ void showFundDetailsModal(BuildContext context, Fund fund) {
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
                     final amount = double.parse(amountController.text);
-                    final userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+                    
+                    // Obtenemos el userId desde el LoginBloc en lugar de FirebaseAuth directamente
+                    final loginState = context.read<LoginBloc>().state;
+                    String userId = '';
+                    if (loginState is LoginSuccess) {
+                      userId = loginState.user.uid;
+                    }
+
                     // Despacha el evento al Bloc desde el context original
                     context.read<FundsBloc>().add(
                           SubscribeFundRequested(
