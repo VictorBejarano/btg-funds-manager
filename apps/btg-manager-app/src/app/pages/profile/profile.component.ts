@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UserNotificationMethod } from '@btg-funds-manager/contracts';
 import { UserStore } from '../../state/user.store';
 
 @Component({
@@ -22,6 +23,8 @@ export class ProfileComponent implements OnInit {
       name: ['', Validators.required],
       lastname: ['', Validators.required],
       phone: [''],
+      availableBalance: [0, Validators.required],
+      notificationMethod: [UserNotificationMethod.Email],
     });
   }
 
@@ -42,6 +45,8 @@ export class ProfileComponent implements OnInit {
         name: user.name,
         lastname: user.lastname,
         phone: user.phone || '',
+        availableBalance: user.availableBalance,
+        notificationMethod: user.notificationMethod || UserNotificationMethod.Email,
       });
       this.isEditing = true;
     }
