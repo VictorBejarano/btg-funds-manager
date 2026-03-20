@@ -2,8 +2,7 @@
 
 PROJECT_ID="btg-funds-manager"
 COLLECTION="funds"
-# Recuerda no subir este token a GitHub (puedes usar: TOKEN=$(gcloud auth print-access-token))
-TOKEN="ya29.a0ATkoCc7Jw6yd3mPW1HSS3Z8qzMHvy-6-6EqdxIYxboAF7bpYNt_bOn23L8GN9B1bS1yDN2by7DhR42U6s63eXvMz20LstUi8HOp295KQofQQCtTKwq7dDOp6nrssgOL6Y9tSIbZTi36U8TbDbjTeKgU-1NvOIG5jH3LX2fpLfq0Z3-Mx6ChkKJm2B0zn8yfmHQI4Pq8aCgYKAQcSARASFQHGX2MiyDv0h94WR1KWhca3DNDHgQ0206"
+TOKEN="PONER TOKEN AQUI"
 
 echo "🚀 Iniciando carga con categorías FPV/FIC aleatorias..."
 
