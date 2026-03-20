@@ -15,19 +15,33 @@ export class SubscriptionsComponent implements OnInit {
   userStore = inject(UserStore);
 
   isUnsubscribing: string | null = null;
+  
+  // Modal state
+  isCancelModalOpen = false;
+  selectedSubscriptionId: string | null = null;
 
   ngOnInit() {
     this.subscriptionsStore.loadSubscriptions();
   }
 
-  async unsubscribe(subscriptionId: string) {
-    if(!confirm("Are you sure you want to cancel this subscription? The amount will be refunded to your balance.")) {
-      return;
-    }
+  openCancelModal(subscriptionId: string) {
+    this.selectedSubscriptionId = subscriptionId;
+    this.isCancelModalOpen = true;
+  }
 
-    this.isUnsubscribing = subscriptionId;
+  closeCancelModal() {
+    this.isCancelModalOpen = false;
+    this.selectedSubscriptionId = null;
+  }
+
+  async confirmUnsubscribe() {
+    if (!this.selectedSubscriptionId) return;
+
+    this.isUnsubscribing = this.selectedSubscriptionId;
+    const subId = this.selectedSubscriptionId;
+    this.closeCancelModal();
     
-    await this.subscriptionsStore.unsubscribeFromFund(subscriptionId);
+    await this.subscriptionsStore.unsubscribeFromFund(subId);
 
     this.isUnsubscribing = null;
     

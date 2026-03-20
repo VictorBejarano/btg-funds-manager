@@ -50,8 +50,34 @@
     </div>
 
     <div class="fund-actions">
-      <button class="action-btn danger-btn" [disabled]="isUnsubscribing === sub.id" (click)="unsubscribe(sub.id)">
-        {{ isUnsubscribing === sub.id ? 'Procesando...' : 'Cancelar suscripcion' }}
+      <button 
+        class="action-btn danger-btn" 
+        [disabled]="isUnsubscribing === sub.id"
+        (click)="openCancelModal(sub.id)"
+      >
+         {{ isUnsubscribing === sub.id ? 'Procesando...' : 'Cancelar suscripcion' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel Subscription Modal -->
+<div class="modal-overlay" *ngIf="isCancelModalOpen">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Cancelar Suscripción</h3>
+      <button class="close-modal-btn" (click)="closeCancelModal()">×</button>
+    </div>
+    
+    <div class="modal-body">
+      <p>¿Estás seguro de que deseas cancelar esta suscripción?</p>
+      <p class="text-warning">El monto invertido será reembolsado a tu saldo disponible para futuras inversiones.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-cancel" (click)="closeCancelModal()">Volver</button>
+      <button type="button" class="btn-danger-confirm" (click)="confirmUnsubscribe()">
+         Confirmar Cancelación
       </button>
     </div>
   </div>
